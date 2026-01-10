@@ -259,15 +259,30 @@
     display: none; /* oculto por defecto */
     }
 
-    /* Mostrar el ranking activo*/
-    .ranking-concurso.active {
-        display: flex; /* 👈 se muestra en horizontal */
-        justify-content: center;
-        gap: 2rem;
-        flex-wrap: wrap; /* permite que se acomoden en varias filas si hay muchos */
-        margin-top: 2rem;
-    }
+    /* Contenedor del ranking activo (una columna centrada y ancha) */ 
+    .ranking-concurso.active { display: flex; 
+    flex-direction: column; /* 👈 apiladas verticalmente */ 
+    align-items: center; /* centradas */ 
+    gap: 16px; margin-top: 2rem; }
 
+    /* Tarjeta de ranking apilada (ancho equivalente a dos tarjetas) */ 
+    .ranking-row { 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: min(920px, 95%); /* ~2 tarjetas de 280px + gaps, responsivo */ 
+    background: #ffffff; 
+    border: 2px solid #1E484B; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12); 
+    display: grid; grid-template-columns: 96px 1fr 160px; /* medalla/posición | info | votos/acciones */ 
+    align-items: center; gap: 16px; padding: 16px 20px; cursor: pointer; }
+    /* Efecto hover */
+    .ranking-row:hover { 
+    transform: translateY(-4px); 
+    box-shadow: 0 12px 28px rgba(0,0,0,0.25); }
+
+    /* Columna izquierda: posición/medalla */ .ranking-pos { display: flex; flex-direction: column; align-items: center; gap: 6px; } .ranking-pos .medal { font-size: 28px; } .ranking-pos .number { width: 56px; height: 56px; border-radius: 50%; background: #00A06E; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 20px; box-shadow: 0 4px 12px rgba(0,160,110,0.35); } /* Columna central: información del video */ .ranking-info h3 { font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 700; color: #1E484B; margin: 0 0 4px 0; } .ranking-info p { font-size: 14px; color: #000000; margin: 2px 0; } /* Columna derecha: votos y acciones */ .ranking-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; } .ranking-votes { background: #FAC00B; color: #000000; padding: 6px 12px; border-radius: 999px; font-weight: 700; box-shadow: 0 4px 12px rgba(250,192,11,0.35); } .ranking-actions { display: flex; gap: 8px; } .ranking-actions .btn { padding: 6px 10px; border-radius: 8px; font-weight: 600; font-size: 13px; border: 2px solid #1E484B; background: #ffffff; color: #1E484B; transition: all 0.2s ease; } .ranking-actions .btn:hover { background: #00A06E; color: #ffffff; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,160,110,0.30); }
+
+    /* Tarjeta de video en ranking */
     .ranking-card {
     width: 280px;
     margin: 10px;
@@ -312,28 +327,44 @@
 
 
 
-<!-- Ranking por concurso -->
 @foreach($videosPorConcurso as $id => $videos)
     <div class="ranking-concurso {{ $loop->first ? 'active' : '' }}" id="ranking-{{ $id }}">
-        @foreach($videos as $video)
-            <div class="ranking-card">
-                <div class="ranking-content p-6">
-                    <h2 class="text-lg font-bold mb-2 text-gray-800">{{ $video->titulo }}</h2>
-                    <p class="text-sm text-gray-700 mb-1"><strong>Participante:</strong> {{ $video->usuario->nombre }}</p>
-                    <p class="text-sm text-gray-700 mb-1"><strong>Género:</strong> {{ ucfirst($video->genero) }}</p>
-                    <span class="inline-block bg-[#FAC00B] text-black px-3 py-1 rounded-full font-bold">
-                        {{ $video->votos_count ?? 0 }} votos
-                    </span>
-                    <div class="mt-3 flex justify-center gap-3">
-                        <button class="btn btn-sm btn-success">👍 Like</button>
-                        <button class="btn btn-sm btn-primary">🗳️ Votar</button>
-                        <button class="btn btn-sm btn-secondary">💬 Comentar</button>
+        @foreach($videos as $index => $video)
+            @php
+                $pos = $index + 1;
+                $medal = $pos === 1 ? '🥇' : ($pos === 2 ? '🥈' : ($pos === 3 ? '🥉' : '🏅'));
+            @endphp
+
+            <div class="ranking-row"
+                 @if(!empty($video->embed_url))
+                    onclick="openModal('{{ $video->embed_url }}', '{{ $video->titulo }}', '{{ $video->usuario->nombre }}')"
+                 @endif>
+                <!-- Posición / medalla -->
+                <div class="ranking-pos">
+                    <div class="number">{{ $pos }}</div>
+                </div>
+
+                <!-- Información del video -->
+                <div class="ranking-info">
+                    <h3>{{ $video->titulo }}</h3>
+                    <p><strong>Participante:</strong> {{ $video->usuario->nombre }}</p>
+                    <p><strong>Género:</strong> {{ ucfirst($video->genero) }}</p>
+                </div>
+
+                <!-- Votos y acciones -->
+                <div class="ranking-meta">
+                    <span class="ranking-votes">{{ $video->votos_count ?? 0 }} votos</span>
+                    <div class="ranking-actions">
+                        <button class="btn">👍 Me gusta</button>
+                        <button class="btn">🗳️ Votar</button>
+                        <button class="btn">💬 Comentar</button>
                     </div>
                 </div>
             </div>
         @endforeach
     </div>
 @endforeach
+
 
 
 
