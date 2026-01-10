@@ -309,9 +309,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="{{ url('/') }}"><i class="fas fa-home me-1"></i> Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url('/') }}"><i class="fas fa-home me-1"></i> Inicio</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('comunidad.todos') }}"><i class="fas fa-music me-1"></i> Géneros</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('ranking.index') }}">Ranking</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('ranking.index') }}"><i class="fas fa-star me-1"></i> Ranking</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('comunidad') }}"><i class="fas fa-users me-1"></i> Concursos
     </a>
 </li>

@@ -166,6 +166,7 @@
     box-shadow: 0 4px 14px rgba(0,0,0,0.08); } 
     .concurso-btn:hover { background-color: #00A06E; color: #ffffff; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,160,110,0.30); } .concurso-btn.active { background-color: #1E484B; color: #ffffff; box-shadow: 0 8px 20px rgba(30,72,75,0.35); border-color: #1E484B; } 
 
+    
     /* Encapsular estilos para no afectar otras partes */
     .ranking-concursos-section {
         font-family: 'Montserrat', sans-serif;
@@ -253,12 +254,12 @@
         border-color: #1E484B;
     }
 
-    // Ranking por concurso
+    /* Ranking por concurso*/
     .ranking-concurso {
     display: none; /* oculto por defecto */
     }
 
-    // Mostrar el ranking activo
+    /* Mostrar el ranking activo*/
     .ranking-concurso.active {
         display: flex; /* 👈 se muestra en horizontal */
         justify-content: center;
@@ -266,6 +267,21 @@
         flex-wrap: wrap; /* permite que se acomoden en varias filas si hay muchos */
         margin-top: 2rem;
     }
+
+    .ranking-card {
+    width: 280px;
+    margin: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    text-align: center;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 20px; /* espacio para botones */
+    }
+
 
 </style>
 
@@ -281,22 +297,25 @@
 
     <!-- Botones de concursos activos -->
     <div class="concursos-buttons">
-        @foreach($concursos as $concurso)
-            <button type="button" class="concurso-btn">
+        @foreach($concursos as $i => $concurso)
+            <button
+                type="button"
+                class="concurso-btn {{ $i === 0 ? 'active' : '' }}"
+                onclick="mostrarRanking('{{ $concurso->id }}', this)">
                 {{ $concurso->nombre }}
             </button>
         @endforeach
     </div>
+
 </div>
 
 
 
 
 <!-- Ranking por concurso -->
-<!-- Ranking por concurso -->
 @foreach($videosPorConcurso as $id => $videos)
-    <div class="ranking-concurso" id="ranking-{{ $id }}">
-        @foreach($videos as $index => $video)
+    <div class="ranking-concurso {{ $loop->first ? 'active' : '' }}" id="ranking-{{ $id }}">
+        @foreach($videos as $video)
             <div class="ranking-card">
                 <div class="ranking-content p-6">
                     <h2 class="text-lg font-bold mb-2 text-gray-800">{{ $video->titulo }}</h2>
@@ -305,8 +324,6 @@
                     <span class="inline-block bg-[#FAC00B] text-black px-3 py-1 rounded-full font-bold">
                         {{ $video->votos_count ?? 0 }} votos
                     </span>
-
-                    <!-- Acciones -->
                     <div class="mt-3 flex justify-center gap-3">
                         <button class="btn btn-sm btn-success">👍 Like</button>
                         <button class="btn btn-sm btn-primary">🗳️ Votar</button>
@@ -321,6 +338,8 @@
 
 
 
+
+
 <!-- Modal -->
 <div id="videoModal" class="modal">
     <div class="modal-content">
@@ -331,44 +350,37 @@
 </div>
 
 <script>
-    function openModal(videoUrl, titulo = '', participante = '') {
-        const modal = document.getElementById('videoModal');
-        const container = document.getElementById('videoContainer');
-        const header = document.getElementById('videoHeader');
+function openModal(videoUrl, titulo = '', participante = '') {
+    const modal = document.getElementById('videoModal');
+    const container = document.getElementById('videoContainer');
+    const header = document.getElementById('videoHeader');
+    header.innerText = `${titulo} — ${participante}`;
+    container.innerHTML = `<iframe width="100%" height="450" src="${videoUrl}" frameborder="0" allowfullscreen></iframe>`;
+    modal.style.display = "block";
+}
+function closeModal() {
+    const modal = document.getElementById('videoModal');
+    const container = document.getElementById('videoContainer');
+    const header = document.getElementById('videoHeader');
+    modal.style.display = "none";
+    container.innerHTML = "";
+    header.innerText = "";
+}
+window.onclick = function(event) {
+    const modal = document.getElementById('videoModal');
+    if (event.target == modal) closeModal();
+};
 
-        header.innerText = `${titulo} — ${participante}`;
-        container.innerHTML = `
-            <iframe width="100%" height="450" src="${videoUrl}" frameborder="0" allowfullscreen></iframe>
-        `;
-        modal.style.display = "block";
-    }
-
-    function closeModal() {
-        const modal = document.getElementById('videoModal');
-        const container = document.getElementById('videoContainer');
-        const header = document.getElementById('videoHeader');
-        modal.style.display = "none";
-        container.innerHTML = "";
-        header.innerText = "";
-    }
-
-    window.onclick = function(event) {
-        const modal = document.getElementById('videoModal');
-        if (event.target == modal) {
-            closeModal();
-        }
-    }
-
-    // 👇 Nueva función para mostrar el ranking por concurso
-    function mostrarRanking(id, boton) {
+/* Mostrar ranking por concurso */
+function mostrarRanking(id, boton) {
     document.querySelectorAll('.ranking-concurso').forEach(div => div.classList.remove('active'));
-    document.getElementById('ranking-' + id).classList.add('active');
+    const seleccionado = document.getElementById('ranking-' + id);
+    if (seleccionado) seleccionado.classList.add('active');
 
     document.querySelectorAll('.concurso-btn').forEach(btn => btn.classList.remove('active'));
-    boton.classList.add('active');
+    if (boton) boton.classList.add('active');
 }
-
-    }
 </script>
+
 
 @endsection
