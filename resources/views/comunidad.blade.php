@@ -53,48 +53,60 @@
             <h2 class="text-center mt-3" style="color: #1E484B;">🎤 Comunidad Activa</h2>
             <!-- Nuevo título Concursos -->
             <h2 class="mt-5 mb-4" style="color: #000000; font-weight: bold;">Concursos</h2>
-            <!-- Barra de géneros -->
-            <div class="d-flex flex-wrap mb-3">
-                @foreach($generos as $genero)
+            <div class="concursos-buttons d-flex flex-wrap mb-3">
+                @foreach($concursos as $i => $concurso)
                     @php
-                        $activo = $genero->estado === 'activo' && $genero->activo == 1;
+                        $activo = $concurso->estado === 'activo' && $concurso->activo == 1;
                     @endphp
-                    <a href="{{ $activo ? route('comunidad.genero', $genero->id) : '#' }}"
-                       class="btn me-2 mb-2 {{ $activo ? 'btn-outline-primary' : 'btn-secondary disabled' }}">
-                        {{ $genero->nombre }}
-                    </a>
+                    <button
+                        type="button"
+                        class="btn me-2 mb-2 {{ $activo ? 'btn-outline-primary' : 'btn-secondary disabled' }} concurso-btn {{ $i === 0 && $activo ? 'active' : '' }}"
+                        {{ $activo ? "onclick=mostrarRanking('$concurso->id', this)" : 'disabled' }}>
+                        {{ $concurso->nombre }}
+                    </button>
                 @endforeach
             </div>
 
-            <!-- Listado de videos en filas de tres -->
-            <div class="row">
-                @forelse($videos as $video)
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100 shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $video->titulo }}</h5>
-                                <p class="card-text"><strong>Género:</strong> {{ $video->genero }}</p>
-                                <p class="card-text"><strong>Artista:</strong> {{ $video->usuario->nombre }}</p>
 
-                                <div class="ratio ratio-16x9">
-                                    <iframe id="player-{{ $video->id }}" src="{{ $video->embed_url }}" frameborder="0" allowfullscreen></iframe>
+            @foreach($videosPorConcurso as $id => $videos)
+                <div class="ranking-concurso {{ $loop->first ? 'active' : '' }}" id="ranking-{{ $id }}">
+                    <div class="row">
+                        @forelse($videos as $video)
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100 shadow-sm"
+                                    @if(!empty($video->embed_url))
+                                        onclick="openModal('{{ $video->embed_url }}', '{{ $video->titulo }}', '{{ $video->usuario->nombre }}')"
+                                    @endif>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ $video->titulo }}</h5>
+                                        <p class="card-text"><strong>Género:</strong> {{ $video->genero }}</p>
+                                        <p class="card-text"><strong>Artista:</strong> {{ $video->usuario->nombre }}</p>
 
+                                        <div class="ratio ratio-16x9">
+                                            <iframe id="player-{{ $video->id }}" src="{{ $video->embed_url }}" frameborder="0" allowfullscreen></iframe>
+                                        </div>
+
+                                        <!-- Acciones debajo del video -->
+                                        <div class="mt-3 d-flex justify-content-center gap-2">
+                                            <button class="btn btn-sm btn-outline-primary">👍 Me gusta</button>
+                                            <button class="btn btn-sm btn-outline-success">🗳️ Votar</button>
+                                            <button class="btn btn-sm btn-outline-secondary">💬 Comentar</button>
+                                        </div>
+
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @empty
+                            <div class="col-12">
+                                <div class="alert alert-info text-center">
+                                    No hay videos disponibles en este momento.
+                                </div>
+                            </div>
+                        @endforelse
                     </div>
-                @empty
-                    <div class="col-12">
-                        <div class="alert alert-info text-center">
-                            No hay videos disponibles en este momento.
-                        </div>
-                    </div>
-                @endforelse
-            </div>
+                </div>
+            @endforeach
 
-        </div>
-    </div>
-</div>
 
 <!-- SDK de Facebook -->
 <div id="fb-root"></div>
@@ -130,6 +142,15 @@
             });
         }
     }
+    function mostrarRanking(id, boton) {
+    document.querySelectorAll('.ranking-concurso').forEach(div => div.classList.remove('active'));
+    const seleccionado = document.getElementById('ranking-' + id);
+    if (seleccionado) seleccionado.classList.add('active');
+
+    document.querySelectorAll('.concurso-btn').forEach(btn => btn.classList.remove('active'));
+    if (boton) boton.classList.add('active');
+    }
+
 </script>
 @endsection
 
