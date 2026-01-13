@@ -1,6 +1,37 @@
 @extends('layouts.app')
 
 @section('content')
+
+<head>
+    <style>
+        .btn-sm {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 6px 12px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #1E484B;
+            color: #ffffff;
+            border-color: #1E484B;
+        }
+
+        .btn-outline-success:hover {
+            background-color: #00A06E;
+            color: #ffffff;
+            border-color: #00A06E;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: #FAC00B;
+            color: #000000;
+            border-color: #FAC00B;
+        }
+
+    </style>
+</head>
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar izquierda -->
