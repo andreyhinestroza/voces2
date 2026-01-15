@@ -8,6 +8,14 @@ use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\ParticipanteController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\ComunidadController;
+use App\Http\Controllers\InteraccionController;
+
+Route::middleware('auth')->group(function () {
+    Route::post('/interacciones/favorito',   [InteraccionController::class, 'toggleFavorito'])->name('interacciones.favorito');
+    Route::post('/interacciones/voto',       [InteraccionController::class, 'toggleVoto'])->name('interacciones.voto');
+    Route::post('/interacciones/comentario', [InteraccionController::class, 'guardarComentario'])->name('interacciones.comentario');
+});
+
 
 
 // Rutas de autenticación predeterminadas de Laravel

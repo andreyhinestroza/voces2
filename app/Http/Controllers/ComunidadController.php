@@ -19,6 +19,8 @@ class ComunidadController extends Controller
             return redirect()->route('auth.google');
         }
 
+        $usuarioId = auth()->id();
+
         // Traer todos los concursos (activos e inactivos)
         $concursos = Concurso::all();
 
@@ -26,7 +28,15 @@ class ComunidadController extends Controller
         $videosPorConcurso = [];
         foreach ($concursos as $concurso) {
             $videos = Video::with('usuario')
-                ->withCount('votos') // agrega votos_count
+                ->withCount(['votos', 'favoritos', 'comentarios']) // agrega *_count
+                ->with([
+                    'favoritos' => function ($q) use ($usuarioId) {
+                        $q->where('usuario_id', $usuarioId);
+                    },
+                    'comentarios' => function ($q) use ($usuarioId) {
+                        $q->where('usuario_id', $usuarioId);
+                    }
+                ])
                 ->where('id_concurso', $concurso->id)
                 ->orderByDesc('votos_count')
                 ->get();
@@ -40,6 +50,7 @@ class ComunidadController extends Controller
         // Enviar todo a la vista
         return view('comunidad', compact('concursos', 'videosPorConcurso', 'artistas'));
     }
+
 
 
     /**
