@@ -94,9 +94,37 @@
                       </button>
                     </div>
 
+
+
+<!-- Comentarios debajo del video -->
+<div class="mt-4 px-3">
+  <h6 class="text-muted mb-2">Comentarios:</h6>
+  <div style="max-height:250px; overflow-y:auto; border:1px solid #1E484B; border-radius:6px; background-color:#f9f9f9; padding:12px;">
+    @forelse($video->comentarios as $comentario)
+      <div style="margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid #ccc;">
+        <strong style="color:#00A06E; font-family:Montserrat, sans-serif;">{{ $comentario->usuario->name }}</strong>
+        <p style="margin:4px 0; font-family:Montserrat, sans-serif;">{{ $comentario->comentario }}</p>
+        <small class="text-muted">{{ $comentario->created_at->format('d/m/Y h:i A') }}</small>
+      </div>
+    @empty
+      <p class="text-muted">Aún no hay comentarios.</p>
+    @endforelse
+  </div>
+</div>
+
+
+
+
+
+
                   </div>
                 </div>
               </div>
+
+
+
+
+
 
               <!-- Modal comentario por video -->
               <div class="modal fade" id="modalComentario-{{ $video->id }}" tabindex="-1">

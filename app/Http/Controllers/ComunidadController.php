@@ -6,6 +6,9 @@ use App\Models\Video;
 use App\Models\User;
 use App\Models\Concurso;
 
+
+
+
 class ComunidadController extends Controller
 {
     /**
@@ -33,9 +36,8 @@ class ComunidadController extends Controller
                     'favoritos' => function ($q) use ($usuarioId) {
                         $q->where('usuario_id', $usuarioId);
                     },
-                    'comentarios' => function ($q) use ($usuarioId) {
-                        $q->where('usuario_id', $usuarioId);
-                    }
+                    // Traer todos los comentarios con su usuario (sin filtrar por usuarioId)
+                    'comentarios.usuario'
                 ])
                 ->where('id_concurso', $concurso->id)
                 ->orderByDesc('votos_count')
@@ -43,6 +45,7 @@ class ComunidadController extends Controller
 
             $videosPorConcurso[$concurso->id] = $videos;
         }
+
 
         // Artistas suscritos
         $artistas = User::where('rol', 'participante')->get();
