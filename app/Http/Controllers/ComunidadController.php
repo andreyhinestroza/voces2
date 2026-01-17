@@ -28,23 +28,25 @@ class ComunidadController extends Controller
         $concursos = Concurso::all();
 
         // Agrupar videos por concurso
-        $videosPorConcurso = [];
-        foreach ($concursos as $concurso) {
-            $videos = Video::with('usuario')
-                ->withCount(['votos', 'favoritos', 'comentarios']) // agrega *_count
-                ->with([
-                    'favoritos' => function ($q) use ($usuarioId) {
-                        $q->where('usuario_id', $usuarioId);
-                    },
-                    // Traer todos los comentarios con su usuario (sin filtrar por usuarioId)
-                    'comentarios.usuario'
-                ])
-                ->where('id_concurso', $concurso->id)
-                ->orderByDesc('votos_count')
-                ->get();
-
-            $videosPorConcurso[$concurso->id] = $videos;
+$videosPorConcurso = [];
+foreach ($concursos as $concurso) {
+    $videos = Video::with('usuario') // dueño del video
+    ->withCount(['votos', 'favoritos', 'comentarios'])
+    ->with([
+        'favoritos' => function ($q) use ($usuarioId) {
+            $q->where('usuario_id', $usuarioId);
         }
+    ])
+    ->with(['comentarios.usuario']) // aquí cargas los usuarios de cada comentario
+    ->where('id_concurso', $concurso->id)
+    ->orderByDesc('votos_count')
+    ->get();
+
+
+
+    $videosPorConcurso[$concurso->id] = $videos;
+}
+
 
 
         // Artistas suscritos

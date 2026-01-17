@@ -41,8 +41,17 @@
              style="box-shadow: 0 0 20px rgba(0,0,0,0.3); border-radius: 0;">
       </div>
 
-      <h2 class="text-center mt-3" style="color: #1E484B;">🎤 Comunidad Activa</h2>
-      <h2 class="mt-5 mb-4" style="color: #000000; font-weight: bold;">Concursos</h2>
+              <div style="background-color:#ffffff; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.1); padding:20px; margin-bottom:30px;">
+                <h2 class="text-center" style="color:#1E484B; font-family:Montserrat, sans-serif;">
+                  🎤 Comunidad Activa
+                </h2>
+                <p class="text-center" style="color:#00A06E; font-family:Montserrat, sans-serif; font-size:1.1rem;">
+                  ⭐ Elige con tu voto al mejor talento
+                </p>
+              </div>
+
+
+
 
       <div class="concursos-buttons d-flex flex-wrap mb-3">
         @foreach($concursos as $i => $concurso)
@@ -96,15 +105,18 @@
 
 
 
-<!-- Comentarios debajo del video -->
-<div class="mt-4 px-3">
+                      <!-- Comentarios debajo del video -->
+                      <div class="mt-4 px-3">
   <h6 class="text-muted mb-2">Comentarios:</h6>
-  <div style="max-height:250px; overflow-y:auto; border:1px solid #1E484B; border-radius:6px; background-color:#f9f9f9; padding:12px;">
+  <div style="max-height:120px; overflow-y:auto; border:1px solid #1E484B; border-radius:6px; background-color:#f9f9f9; padding:10px;">
     @forelse($video->comentarios as $comentario)
-      <div style="margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid #ccc;">
-        <strong style="color:#00A06E; font-family:Montserrat, sans-serif;">{{ $comentario->usuario->name }}</strong>
-        <p style="margin:4px 0; font-family:Montserrat, sans-serif;">{{ $comentario->comentario }}</p>
-        <small class="text-muted">{{ $comentario->created_at->format('d/m/Y h:i A') }}</small>
+      <div style="margin-bottom:6px; padding-bottom:4px; border-bottom:1px solid #ddd; line-height:1.2;">
+        <strong style="color:#00A06E; font-family:Montserrat, sans-serif; font-size:0.9rem;">
+          {{ $comentario->usuario->name }}
+        </strong>
+        <p style="margin:2px 0; font-family:Montserrat, sans-serif; font-size:0.9rem;">
+          {{ $comentario->comentario }}
+        </p>
       </div>
     @empty
       <p class="text-muted">Aún no hay comentarios.</p>
@@ -115,17 +127,9 @@
 
 
 
-
-
                   </div>
                 </div>
               </div>
-
-
-
-
-
-
               <!-- Modal comentario por video -->
               <div class="modal fade" id="modalComentario-{{ $video->id }}" tabindex="-1">
                 <div class="modal-dialog">

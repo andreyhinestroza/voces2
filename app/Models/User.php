@@ -30,6 +30,14 @@ class User extends Authenticatable
         'fecha_registro' => 'datetime',
     ];
 
+
+public function getNameAttribute()
+{
+    return $this->nombre;
+}
+
+
+
     // Relación: un usuario tiene muchos videos
     public function videos()
     {
