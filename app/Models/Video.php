@@ -24,24 +24,32 @@ class Video extends Model
     {
         $url = $this->url_video;
 
+        // Si ya es embed
         if (Str::contains($url, 'embed/')) {
             return $url;
         }
 
-        if (Str::contains($url, 'youtu.be/')) {
-            $id = Str::after($url, 'youtu.be/');
-            $id = Str::before($id, '?');
-            return "https://www.youtube.com/embed/{$id}?enablejsapi=1";
-        }
-
-        if (Str::contains($url, 'watch?v=')) {
-            $id = Str::after($url, 'v=');
-            $id = Str::before($id, '&');
-            return "https://www.youtube.com/embed/{$id}?enablejsapi=1";
+        // Extraer ID de cualquier URL de YouTube
+        parse_str(parse_url($url, PHP_URL_QUERY), $vars);
+        if (!empty($vars['v'])) {
+            return "https://www.youtube.com/embed/{$vars['v']}";
         }
 
         return null;
     }
+
+
+
+
+    public function getYoutubeIdAttribute()
+    {
+        // Extrae el ID del video desde la URL
+        parse_str(parse_url($this->url_video, PHP_URL_QUERY), $vars);
+        return $vars['v'] ?? null;
+    }
+
+
+
 
     // Relación: un video pertenece a un usuario
     public function usuario()

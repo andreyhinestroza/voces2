@@ -3,35 +3,11 @@
 @section('content')
 <div class="container-fluid">
   <div class="row">
-    <!-- Sidebar -->
-    <div class="col-md-3 bg-light border-end" style="height: 100vh; overflow-y: auto;">
-      <h5 class="mt-3 ms-3">🎧 Artistas Suscritos</h5>
-      <ul class="list-group list-group-flush">
-        @foreach($artistas as $artista)
-          <li class="list-group-item">
-            <i class="fas fa-user me-2"></i>{{ $artista->nombre }}
-          </li>
-        @endforeach
-      </ul>
-      <hr class="my-3">
-      <h6 class="ms-3">👤 Mi cuenta</h6>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item"><i class="fas fa-history me-2"></i> Historial</li>
-        <li class="list-group-item"><i class="fas fa-list me-2"></i> Lista de reproducción</li>
-        <li class="list-group-item"><i class="fas fa-thumbs-up me-2"></i> Videos que me gustan</li>
-        @auth
-          @if(Auth::user()->rol === 'participante')
-            <li class="list-group-item"><i class="fas fa-video me-2"></i> Mis videos</li>
-          @elseif(Auth::user()->rol === 'espectador')
-            <li class="list-group-item"><i class="fas fa-eye me-2"></i> Mis favoritos</li>
-          @endif
-        @else
-          <li class="list-group-item text-center">
-            <a href="{{ route('auth.google') }}" class="btn btn-outline-primary w-100">Inicia sesión con Google</a>
-          </li>
-        @endauth
-      </ul>
-    </div>
+    <!-- Panel izquierdo institucional -->
+        <div class="col-md-3 bg-light border-end" style="height: 100vh; overflow-y: auto;">
+            @include('partials.sidebar')
+        </div>
+    
 
     <!-- Contenido principal -->
     <div class="col-md-9">
@@ -43,7 +19,7 @@
 
               <div style="background-color:#ffffff; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.1); padding:20px; margin-bottom:30px;">
                 <h2 class="text-center" style="color:#1E484B; font-family:Montserrat, sans-serif;">
-                  🎤 Comunidad Activa
+                  🗳️ Votaciones
                 </h2>
                 <p class="text-center" style="color:#00A06E; font-family:Montserrat, sans-serif; font-size:1.1rem;">
                   ⭐ Elige con tu voto al mejor talento
@@ -145,7 +121,7 @@
               </div>
             @empty
               <div class="col-12">
-                <div class="alert alert-info text-center">No hay videos disponibles en este momento.</div>
+                <div class="alert alert-info text-center"></div>
               </div>
             @endforelse
           </div>

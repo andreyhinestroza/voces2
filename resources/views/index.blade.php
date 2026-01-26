@@ -742,7 +742,7 @@
         });
     </script>
 
-        // 🎥 YouTube IFrame API para control de reproducción
+        <!-- // 🎥 YouTube IFrame API para control de reproducción -->
         <script src="https://www.youtube.com/iframe_api"></script>
         <script>
             let players = [];

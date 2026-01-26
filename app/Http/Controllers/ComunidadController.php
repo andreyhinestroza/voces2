@@ -80,6 +80,33 @@ foreach ($concursos as $concurso) {
         return view('comunidad', compact('videos', 'artistas', 'concursos'));
     }
 
+    public function historial()
+    {
+        $usuarioId = auth()->id();
+
+        // Ejemplo: últimos 5 votos
+        $ultimosVotos = \App\Models\Voto::with('video')
+            ->where('id_usuario', $usuarioId)
+            ->latest()
+            ->take(5)
+            ->get();
+
+        // Ejemplo: últimos 5 comentarios
+        $ultimosComentarios = \App\Models\Comentario::with('video')
+            ->where('usuario_id', $usuarioId)
+            ->latest()
+            ->take(5)
+            ->get();
+
+        // Ejemplo: últimos 5 favoritos
+        $ultimosFavoritos = \App\Models\Favorito::with('video')
+            ->where('usuario_id', $usuarioId)
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('usuario.historial', compact('ultimosVotos', 'ultimosComentarios', 'ultimosFavoritos'));
+    }
 
     public function todos()
     {
