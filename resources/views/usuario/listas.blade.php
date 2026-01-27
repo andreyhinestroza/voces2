@@ -3,21 +3,76 @@
 
 
 @section('content')
-<div class="container-fluid">
-  <div class="row">
-    <!-- Panel izquierdo fijo -->
+<style>
+  .fixed-sidebar {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 320px;
+    bottom: 0;
+    overflow-y: auto;
+    background-color: #1E484B;
+    z-index: 10;
+    padding: 20px;
+    font-family: Montserrat;
+  }
+
+  .main-content {
+    margin-left: 320px;
+    padding: 20px;
+    min-height: calc(100vh - 70px);
+    max-width: calc(100% - 320px); /* evita desbordamiento */
+    overflow-x: hidden;
+  }
+
+  footer {
+    position: relative;
+    z-index: 20;
+    background-color: #1E484B;
+    color: white;
+    font-family: Montserrat;
+    padding: 40px 20px;
+  }
+
+  @media (max-width: 768px) {
+    .fixed-sidebar {
+      position: static;
+      width: 100%;
+      height: auto;
+    }
+
+    .main-content {
+      margin-left: 0;
+      max-width: 100%;
+    }
+  }
+
+  .card-body, .card-header, .lista-item {
+    word-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+  }
+
+  .card-header h6, .card-title, .card-text, .card-body p {
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+</style>
      <!-- Panel izquierdo institucional -->
-        <div class="col-md-3 bg-light border-end" style="height: 100vh; overflow-y: auto;">
-            @include('partials.sidebar')
-        </div>
+        <!-- Panel izquierdo fijo -->
+<div class="fixed-sidebar">
+  @include('partials.sidebar')
+</div>
 
 
     <!-- Contenido principal -->
-    <div class="col-md-9">
-      <div class="d-flex justify-content-between align-items-center mt-3 mb-4">
-        <h4 style="color:#1E484B; font-family:Montserrat;">🎵 Mis listas de reproducción</h4>
-        <button class="btn btn-success" onclick="mostrarFormularioCrear()">➕ Crear nueva lista</button>
+    <div class="main-content">
+      <div class="p-3 mb-4 rounded d-flex justify-content-between align-items-center flex-wrap" style="background-color:#00A06E; color:white; font-family:Montserrat;">
+        <h4 class="m-0">🎵 Mis listas de reproducción</h4>
+        <button class="btn btn-light fw-bold mt-2 mt-md-0" onclick="mostrarFormularioCrear()">➕ Crear nueva lista</button>
       </div>
+
+
 
       <!-- Filtro de listas -->
       <div class="mb-3">

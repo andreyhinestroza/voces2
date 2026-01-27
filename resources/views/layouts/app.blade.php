@@ -103,11 +103,14 @@
             object-fit: cover;
         }
         footer {
-            background-color: var(--bs-primary);
+            position: relative;
+            z-index: 20;
+            background-color: #1E484B;
             color: white;
-            padding: 2rem 0;
-            margin-top: 2rem;
+            font-family: Montserrat;
+            padding: 40px 20px;
         }
+
         .social-icon {
             font-size: 1.5rem;
             margin: 0 0.5rem;

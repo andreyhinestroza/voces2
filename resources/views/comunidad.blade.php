@@ -1,16 +1,60 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid">
-  <div class="row">
+
+    <style>
+      .fixed-sidebar {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        width: 320px;
+        bottom: 0;
+        overflow-y: auto;
+        background-color: #1E484B;
+        z-index: 10;
+        padding: 20px;
+        font-family: Montserrat;
+      }
+
+      .main-content {
+        margin-left: 320px;
+        padding: 20px;
+        min-height: calc(100vh - 70px);
+        max-width: calc(100% - 320px);
+        overflow-x: hidden;
+      }
+
+      footer {
+        position: relative;
+        z-index: 20;
+        background-color: #1E484B;
+        color: white;
+        font-family: Montserrat;
+        padding: 40px 20px;
+      }
+
+      @media (max-width: 768px) {
+        .fixed-sidebar {
+          position: static;
+          width: 100%;
+          height: auto;
+        }
+
+        .main-content {
+          margin-left: 0;
+          max-width: 100%;
+        }
+      }
+    </style>
     <!-- Panel izquierdo institucional -->
-        <div class="col-md-3 bg-light border-end" style="height: 100vh; overflow-y: auto;">
-            @include('partials.sidebar')
+        <!-- Panel izquierdo fijo -->
+        <div class="fixed-sidebar">
+          @include('partials.sidebar')
         </div>
     
 
     <!-- Contenido principal -->
-    <div class="col-md-9">
+    <div class="main-content">
       <div class="mb-4 text-center">
         <img src="{{ asset('img/propaganda.png') }}" alt="Publicidad Alcaldía"
              class="img-fluid w-100"

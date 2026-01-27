@@ -27,14 +27,46 @@
     font-weight: bold;
     box-shadow: inset 0 0 0 2px #FAC00B;
   }
+
+  .sidebar-header {
+    color: white;
+    font-family: Montserrat;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .sidebar-account {
+    background-color: white;
+    color: #1E484B;
+    font-family: Montserrat;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sidebar-account i {
+    color: #1E484B;
+  }
+
 </style>
 
-<h5 class="mt-3 ms-3" style="font-family:Montserrat;">🎧 USUARIO</h5>
-<ul class="list-group list-group-flush mb-4">
-  <li class="list-group-item"><i class="fas fa-user me-2"></i>{{ auth()->user()->nombre }}</li>
-</ul>
+<h5 class="mt-3 ms-3" style="font-family:Montserrat; color:white;">🎧 Usuario</h5>
 
-<h6 class="ms-3" style="font-family:Montserrat;">👤 Mi cuenta</h6>
+<div class="mx-3 mb-4 p-2 rounded d-flex align-items-center justify-content-center" style="background-color:white;">
+  <span style="color:#1E484B; font-weight:bold; font-family:Montserrat;">
+    <i class="fas fa-user me-2" style="color:#1E484B;"></i>{{ auth()->user()->nombre }}
+  </span>
+</div>
+
+<h6 class="ms-3" style="font-family:Montserrat; color:white;">
+  <i class="fas fa-user" style="color:white;"></i>  Mi cuenta
+</h6>
+
+
 <div class="d-grid gap-3 p-3">
   <a href="{{ route('comunidad') }}" class="sidebar-btn {{ request()->routeIs('comunidad') ? 'active' : '' }}">
     🗳️ Votaciones
