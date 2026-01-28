@@ -10,6 +10,46 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
     
+    /* Tipografía institucional */
+    .btn {
+    font-family: 'Montserrat', sans-serif;
+    transition: all 0.3s ease;
+    }
+
+    /* Botón Ver Clasificación (verde institucional) */
+    .custom-btn-ver {
+    border: 2px solid #1E484B;
+    color: #1E484B;
+    background-color: transparent;
+    }
+    .custom-btn-ver:hover {
+    background-color: #1E484B;
+    color: white;
+    }
+
+    /* Botón Votaciones (amarillo institucional) */
+    .custom-btn-votar {
+    border: 2px solid #FAC00B;
+    color: #FAC00B;
+    background-color: transparent;
+    }
+    .custom-btn-votar:hover {
+    background-color: #FAC00B;
+    color: white;
+    }
+
+    /* Botón Subir Video (verde claro institucional) */
+    .custom-btn-video {
+    border: 2px solid #00A06E;
+    color: #00A06E;
+    background-color: transparent;
+    }
+    .custom-btn-video:hover {
+    background-color: #00A06E;
+    color: white;
+    }
+
+
     .videos-recientes-btn {
     display: block;
     width: 100%; /* ocupa todo el ancho */
@@ -314,6 +354,18 @@
             border: 2px solid red; /* borde rojo en la foto */
         }
 
+        .custom-btn-ver {
+        border: 2px solid #1E484B;
+        color: #1E484B;
+        background-color: transparent;
+        font-family: Montserrat;
+        transition: all 0.3s ease;
+        }
+
+        .custom-btn-ver:hover {
+        background-color: #1E484B;
+        color: white;
+        }
 
   
 
@@ -516,17 +568,17 @@
                 <div class="mt-auto">
                     @auth
                         @if(Auth::user()->rol === 'participante')
-                            <a href="javascript:void(0)" class="btn btn-lg btn-outline-success custom-btn" data-bs-toggle="modal" data-bs-target="#subirVideoModal">
-                                Subir Video
+                            <a href="javascript:void(0)" class="btn btn-lg custom-btn-video" data-bs-toggle="modal" data-bs-target="#subirVideoModal">
+                                📹 Subir Video
                             </a>
                         @else
-                            <a href="javascript:void(0)" class="btn btn-lg btn-outline-success custom-btn" data-bs-toggle="modal" data-bs-target="#convertirseModal">
-                                Subir Video
+                            <a href="javascript:void(0)" class="btn btn-lg custom-btn-video" data-bs-toggle="modal" data-bs-target="#convertirseModal">
+                                📹 Subir Video
                             </a>
                         @endif
                     @else
-                        <a href="{{ route('auth.google') }}" class="btn btn-lg btn-outline-success custom-btn" title="Inicia sesión para subir video">
-                            Subir Video
+                        <a href="{{ route('auth.google') }}" class="btn btn-lg custom-btn-video" title="Inicia sesión para subir video">
+                            📹 Subir Video
                         </a>
                     @endauth
                 </div>
@@ -538,12 +590,12 @@
             <div class="card-credencial h-100 d-flex flex-column justify-content-between">
                 <div>
                     <i class="fa-solid fa-users fa-4x mb-3 text-warning"></i>
-                    <h3 class="text-warning">Comunidad Activa</h3>
-                    <p>Conecta con otros artistas locales, vota por tus favoritos y comenta en sus presentaciones.</p>
+                    <h3 class="text-warning">Vota Aquí</h3>
+                    <p>Conecta con otros artistas locales, Guarda listas, vota por tus favoritos y comenta en sus presentaciones.</p>
                 </div>
                 <div class="mt-auto">
-                    <a href="{{ route('comunidad') }}" class="btn btn-lg btn-outline-warning custom-btn">
-                        Ir a la Comunidad
+                    <a href="{{ route('comunidad') }}" class="btn btn-lg custom-btn-votar">
+                        🗳️ Ir a las Votaciones
                     </a>
                 </div>
             </div>
@@ -558,9 +610,8 @@
                     <p>Participa en categorías como salsa, pop, folclor y más, celebrando nuestra diversidad musical.</p>
                 </div>
                 <div class="mt-auto">
-                    <a href="{{ route('comunidad.todos') }}" class="btn btn-lg custom-btn"
-                    style="border: 2px solid #1E484B; color: #1E484B;">
-                        Ver Clasificación
+                    <a href="{{ route('comunidad.todos') }}" class="btn btn-lg custom-btn-ver">
+                        🎶 Ver Clasificación
                     </a>
                 </div>
             </div>
