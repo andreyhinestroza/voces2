@@ -55,20 +55,25 @@
 
     <!-- Contenido principal -->
     <div class="main-content">
-      <div class="mb-4 text-center">
-        <img src="{{ asset('img/propaganda.png') }}" alt="Publicidad Alcaldía"
-             class="img-fluid w-100"
-             style="box-shadow: 0 0 20px rgba(0,0,0,0.3); border-radius: 0;">
-      </div>
+      <div class="mb-4 text-center" style="border-radius: 45px; overflow: hidden; box-shadow: 0 4px 30px rgba(0,0,0,0.25); display: inline-block;">
+  <img src="{{ asset('img/propaganda.png') }}" alt="Publicidad Alcaldía"
+       class="img-fluid"
+       style="width: 100%; height: auto; display: block;">
+</div>
 
-              <div style="background-color:#ffffff; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.1); padding:20px; margin-bottom:30px;">
-                <h2 class="text-center" style="color:#1E484B; font-family:Montserrat, sans-serif;">
-                  🗳️ Votaciones
-                </h2>
-                <p class="text-center" style="color:#00A06E; font-family:Montserrat, sans-serif; font-size:1.1rem;">
-                  ⭐ Elige con tu voto al mejor talento
-                </p>
-              </div>
+
+
+
+
+              <div style="background-color:#FAC00B; border-radius:20px; overflow:hidden; box-shadow:0 4px 30px rgba(0,0,0,0.25); padding:20px; margin-bottom:30px;">
+  <h2 class="text-center" style="color:#1E484B; font-family:Montserrat, sans-serif; font-weight:bold;">
+    🗳️ Votaciones
+  </h2>
+  <p class="text-center" style="color:#1E484B; font-weight:bold; font-family:Montserrat, sans-serif; font-size:1.1rem;">
+    ⭐ Elige con tu voto al mejor talento
+  </p>
+</div>
+
 
 
 
@@ -151,18 +156,23 @@
                 </div>
               </div>
               <!-- Modal comentario por video -->
-              <div class="modal fade" id="modalComentario-{{ $video->id }}" tabindex="-1">
-                <div class="modal-dialog">
-                  <form class="modal-content js-form-comentario" data-video-id="{{ $video->id }}">
-                    <div class="modal-body">
-                      <textarea class="form-control" name="comentario" rows="3"></textarea>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="submit" class="btn btn-success">Guardar</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
+              <!-- Modal comentario por video -->
+<div class="modal fade" id="modalComentario-{{ $video->id }}" tabindex="-1">
+  <div class="modal-dialog">
+    <form class="modal-content js-form-comentario" data-video-id="{{ $video->id }}">
+      <div class="modal-body">
+        <p class="text-muted" style="font-size:0.9rem;">
+          ⚠️ Solo puedes dejar un comentario por video. Si escribes uno nuevo, reemplazará el anterior.
+        </p>
+        <textarea class="form-control" name="comentario" rows="3" placeholder="Escribe tu comentario aquí..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
             @empty
               <div class="col-12">
                 <div class="alert alert-info text-center"></div>

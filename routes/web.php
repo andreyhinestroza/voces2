@@ -11,6 +11,12 @@ use App\Http\Controllers\ComunidadController;
 use App\Http\Controllers\InteraccionController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ListaVideoController;
+use App\Http\Controllers\NewsletterController;
+
+
+// ... envio de correo a la BD para noticias
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+
 
 Route::middleware('auth')->group(function () {
     // ⭐ Interacciones
@@ -44,7 +50,7 @@ Route::middleware('auth')->group(function () {
 
     // ⭐ Concursos y videos
     Route::get('/concursos', [ConcursoController::class, 'index'])->name('concursos');
-    Route::post('/videos', [VideoController::class, 'store'])->name('video.store');
+    
 });
 
 // 🔐 Autenticación con Google

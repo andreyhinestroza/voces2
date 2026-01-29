@@ -371,6 +371,7 @@
 
     </style>
 </head>
+
 <body>
    <!-- 🔝 Barra de navegación fija -->
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: var(--bs-primary);">
@@ -484,10 +485,21 @@
                             <p class="lead animated-text">
                                 Participa, vota y descubre las increíbles voces de nuestra comunidad
                             </p>
-                            <div class="mt-4">
-                                <button class="btn btn-warning btn-lg me-2 animated-text">Participar</button>
-                                <button class="btn btn-outline-light btn-lg animated-text">Ver Rankings</button>
-                            </div>
+                                <div class="d-flex justify-content-center gap-3 mt-4">
+                                    {{-- Botón Votaciones (lleva a Concursos) --}}
+                                    <a href="{{ route('comunidad') }}" 
+                                    class="btn btn-warning btn-lg me-2 animated-text">
+                                        Votaciones
+                                    </a>
+
+                                    {{-- Botón Ver Rankings --}}
+                                    <a href="{{ route('ranking.index') }}" 
+                                    class="btn btn-outline-light btn-lg animated-text">
+                                        Ver Rankings
+                                    </a>
+                                </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -501,8 +513,19 @@
                                 Un espacio para el arte, la cultura y la inclusión
                             </p>
                             <div class="mt-4">
-                                <button class="btn btn-warning btn-lg me-2 animated-text">Participar</button>
-                                <button class="btn btn-outline-light btn-lg animated-text">Ver Rankings</button>
+                                    <div class="d-flex justify-content-center gap-3 mt-4">
+                                    {{-- Botón Votaciones (lleva a Concursos) --}}
+                                    <a href="{{ route('comunidad') }}" 
+                                    class="btn btn-warning btn-lg me-2 animated-text">
+                                        Votaciones
+                                    </a>
+
+                                    {{-- Botón Ver Rankings --}}
+                                    <a href="{{ route('ranking.index') }}" 
+                                    class="btn btn-outline-light btn-lg animated-text">
+                                        Ver Rankings
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -516,10 +539,19 @@
                             <p class="lead animated-text">
                                 Una plataforma para el talento local
                             </p>
-                            <div class="mt-4">
-                                <button class="btn btn-warning btn-lg me-2 animated-text">Participar</button>
-                                <button class="btn btn-outline-light btn-lg animated-text">Ver Rankings</button>
-                            </div>
+                                <div class="d-flex justify-content-center gap-3 mt-4">
+                                    {{-- Botón Votaciones (lleva a Concursos) --}}
+                                    <a href="{{ route('comunidad') }}" 
+                                    class="btn btn-warning btn-lg me-2 animated-text">
+                                        Votaciones
+                                    </a>
+
+                                    {{-- Botón Ver Rankings --}}
+                                    <a href="{{ route('ranking.index') }}" 
+                                    class="btn btn-outline-light btn-lg animated-text">
+                                        Ver Rankings
+                                    </a>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -532,10 +564,19 @@
                             <p class="lead animated-text">
                                 Apoya a tus artistas favoritos
                             </p>
-                            <div class="mt-4">
-                                <button class="btn btn-warning btn-lg me-2 animated-text">Participar</button>
-                                <button class="btn btn-outline-light btn-lg animated-text">Ver Rankings</button>
-                            </div>
+                                <div class="d-flex justify-content-center gap-3 mt-4">
+                                    {{-- Botón Votaciones (lleva a Concursos) --}}
+                                    <a href="{{ route('comunidad') }}" 
+                                    class="btn btn-warning btn-lg me-2 animated-text">
+                                        Votaciones
+                                    </a>
+
+                                    {{-- Botón Ver Rankings --}}
+                                    <a href="{{ route('ranking.index') }}" 
+                                    class="btn btn-outline-light btn-lg animated-text">
+                                        Ver Rankings
+                                    </a>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -555,6 +596,7 @@
         </div>
     </section>
 
+    <!-- 🎬 Sección: Tres bloques de características principales -->
 <section class="container my-5">
     <div class="row text-center align-items-stretch">
         <!-- Bloque: Sube tu Video -->
@@ -591,7 +633,7 @@
                 <div>
                     <i class="fa-solid fa-users fa-4x mb-3 text-warning"></i>
                     <h3 class="text-warning">Vota Aquí</h3>
-                    <p>Conecta con otros artistas locales, Guarda listas, vota por tus favoritos y comenta en sus presentaciones.</p>
+                    <p>Conecta con artistas locales, guarda listas, vota por tus favoritos y comenta en sus presentaciones.</p>
                 </div>
                 <div class="mt-auto">
                     <a href="{{ route('comunidad') }}" class="btn btn-lg custom-btn-votar">
@@ -607,7 +649,7 @@
                 <div>
                     <i class="fa-solid fa-music fa-4x mb-3" style="color: #1E484B;"></i>
                     <h3 class="mt-3" style="color: #1E484B;">Clasificación por Género</h3>
-                    <p>Participa en categorías como salsa, pop, folclor y más, celebrando nuestra diversidad musical.</p>
+                    <p>Visualiza los videospor categorías como salsa, pop, folclor y más, celebra la diversidad musical.</p>
                 </div>
                 <div class="mt-auto">
                     <a href="{{ route('comunidad.todos') }}" class="btn btn-lg custom-btn-ver">
@@ -717,10 +759,12 @@
         @endforeach
     </div>
 
-            <div class="text-center mt-4">
-                <a href="#" class="btn btn-primary">Ver Más Videos</a>
-            </div>
-
+            <!-- Botón Ver Más Videos -->
+        <div class="text-center mt-4">
+            <a href="{{ route('comunidad.todos') }}" class="btn btn-primary">
+                Ver Más Videos
+            </a>
+        </div>
 </div>
 
 
@@ -819,6 +863,24 @@
                 }
             }
         </script>
+        
+            @if(session('success'))
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Video publicado!',
+                    text: '{{ session('success') }}',
+                    confirmButtonColor: '#00A06E',
+                    confirmButtonText: 'Aceptar'
+                });
+            });
+        </script>
+        @endif
+
+
+
 
 </body>
 </html>
@@ -875,22 +937,25 @@
                     <option value="folclor">Folclor</option>
                     <option value="vallenato">Vallenato</option>
                     <option value="ranchera">Ranchera</option>
+                    <option value="Rap">Rap</option>
+                    <option value="regueton">Reguetón</option>
                     <option value="otro">Otro</option>
                 </select>
             </div>
             
-            <!-- Concurso -->
-            <div class="mb-3">
-                <label for="id_concurso" class="form-label">Concurso</label>
-                <select name="id_concurso" id="id_concurso" class="form-select">
-                    <option value="" selected>Ninguno</option>
-                    @forelse($concursos as $concurso)
-                        <option value="{{ $concurso->id }}">{{ $concurso->nombre }}</option>
-                    @empty
-                        <option disabled>No hay concursos activos</option>
-                    @endforelse
-                </select>
-            </div>
+           <!-- Concurso -->
+<div class="mb-3">
+    <label for="id_concurso" class="form-label">Concurso</label>
+    <select name="id_concurso" id="id_concurso" class="form-select">
+        <option value="0" selected>Ninguno</option>
+        @forelse($concursos as $concurso)
+            <option value="{{ $concurso->id }}">{{ $concurso->nombre }}</option>
+        @empty
+            <option disabled>No hay concursos activos</option>
+        @endforelse
+    </select>
+</div>
+
 
             
             <!-- Botón -->
@@ -932,4 +997,5 @@
     </div>
   </div>
 </div>
+
 

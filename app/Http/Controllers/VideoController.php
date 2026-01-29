@@ -26,37 +26,40 @@ class VideoController extends Controller
      * Guardar un nuevo video
      */
     public function store(Request $request)
-    {
-        $request->validate([
-            'titulo' => 'required|string|max:255',
-            'url_video' => [
-                'required',
-                'url',
-                'regex:/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w\-]+$/'
-            ],
-            'genero' => 'required|string|max:100',
-            'id_concurso' => 'nullable|integer|exists:concursos,id',
-        ], [
-            'titulo.required' => 'El título del video es obligatorio.',
-            'url_video.required' => 'Debes ingresar el enlace de YouTube.',
-            'url_video.url' => 'El enlace debe ser una URL válida.',
-            'url_video.regex' => 'El enlace debe ser un enlace válido de YouTube (watch?v= o youtu.be).',
-            'genero.required' => 'Selecciona un género musical.',
-            'id_concurso.integer' => 'El concurso seleccionado no es válido.',
-            'id_concurso.exists' => 'El concurso seleccionado no existe.',
-        ]);
+{
+    // Validación flexible para enlaces de YouTube
+    $request->validate([
+        'titulo' => 'required|string|max:255',
+        'url_video' => [
+            'required',
+            'url',
+            'regex:/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w\-]+.*$/'
+        ],
+        'genero' => 'required|string|max:100',
+        'id_concurso' => 'nullable|integer',
+    ], [
+        'titulo.required' => 'El título del video es obligatorio.',
+        'url_video.required' => 'Debes ingresar el enlace de YouTube.',
+        'url_video.url' => 'El enlace debe ser una URL válida.',
+        'url_video.regex' => 'El enlace debe ser un enlace válido de YouTube (watch?v= o youtu.be).',
+        'genero.required' => 'Selecciona un género musical.',
+        'id_concurso.integer' => 'El concurso seleccionado no es válido.',
+    ]);
 
-        Video::create([
-            'id_usuario' => Auth::user()->id,
-            'id_concurso' => $request->id_concurso ?: null,
-            'titulo' => $request->titulo,
-            'url_video' => $request->url_video,
-            'fecha_subida' => now(),
-            'genero' => $request->genero,
-        ]);
+    // Crear el registro en la tabla videos
+    Video::create([
+        'id_usuario'   => Auth::user()->id,
+        'id_concurso'  => $request->id_concurso == 0 ? null : $request->id_concurso,
+        'titulo'       => $request->titulo,
+        'url_video'    => $request->url_video,
+        'fecha_subida' => now(),
+        'genero'       => $request->genero,
+    ]);
 
-        return redirect()->route('perfil')->with('success', 'Video subido correctamente.');
-    }
+    // Redirigir con mensaje de éxito
+    return redirect()->back()->with('success', '¡Tu video ha sido subido exitosamente!');
+}
+
 
     /**
      * Listar videos disponibles para agregar a listas

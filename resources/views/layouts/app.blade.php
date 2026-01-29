@@ -290,6 +290,39 @@
 
 
 
+.slider-btn {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  font-size: 1.1rem;
+  padding: 12px 24px;
+  border-radius: 30px;
+  border: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.btn-participar {
+  background-color: #00A06E;
+  color: white;
+}
+
+.btn-participar:hover {
+  background-color: #00885D;
+  transform: scale(1.05);
+}
+
+.btn-ranking {
+  background-color: #FAC00B;
+  color: #1E484B;
+}
+
+.btn-ranking:hover {
+  background-color: #e0ac00;
+  transform: scale(1.05);
+}
+
+
+
 
 
     </style>
@@ -387,15 +420,19 @@
                         <strong>Alcaldía de Candelaria</strong><br>
                         Plaza Central, Candelaria<br>
                         Valle del Cauca<br>
-                        Tel: (34) 922 123 456
+                        Tel: +57 (602) 2646827
                     </address>
                 </div>
                 <div class="col-md-3 mb-4">
                     <h5>Newsletter</h5>
                     <p>Suscríbete para recibir noticias y actualizaciones.</p>
                     <div class="input-group">
-                        <input type="email" class="form-control" placeholder="Tu email">
-                        <button class="btn btn-primary" type="button">Suscribir</button>
+                        <form action="{{ route('newsletter.subscribe') }}" method="POST" id="newsletterForm" class="d-flex">
+                            @csrf
+                            <input type="email" name="email" class="form-control" placeholder="Tu email" required>
+                            <button class="btn btn-primary ms-2" type="submit">Suscribir</button>
+                        </form>
+
                     </div>
                 </div>
             </div>
@@ -407,5 +444,21 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     @yield('scripts')
+
+    @if(session('newsletter_message'))
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        Swal.fire({
+            icon: 'success',
+            title: 'Newsletter',
+            text: '{{ session('newsletter_message') }}',
+            confirmButtonColor: '#00A06E',
+            confirmButtonText: 'Aceptar'
+        });
+    });
+    </script>
+    @endif
+
 </body>
 </html>
