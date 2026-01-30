@@ -120,7 +120,7 @@ foreach ($concursos as $concurso) {
             $videos = Video::with('usuario')
                         ->where('genero', $nombreGenero)
                         ->inRandomOrder()
-                        ->take(3)
+                        
                         ->get();
 
             $generoVideos[] = [
