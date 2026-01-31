@@ -84,6 +84,15 @@ class Video extends Model
     {
         return $this->hasMany(Comentario::class, 'video_id');
     }
+    // Accesor: contar favoritos fácilmente
+    public function getFavoritosCountAttribute()
+    {
+        return $this->favoritos()->count();
+    }
+
+    // Accesor: contar comentarios fácilmente 
+    public function getComentariosCountAttribute() 
+    { return $this->comentarios()->count(); }
 
     // Accesor: contar votos fácilmente
     public function getVotosCountAttribute()
