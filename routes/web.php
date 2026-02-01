@@ -75,4 +75,4 @@ Route::post('/convertirse-participante', [ParticipanteController::class, 'store'
 
 // 🎥 Subida de videos
 Route::get('/videos/create', [VideoController::class, 'create'])->name('video.create');
-Route::post('/videos', [VideoController::class, 'store'])->name('video.store');
+Route::post('/video/store', [VideoController::class, 'store'])->name('video.store');

@@ -13,7 +13,7 @@
 
     @foreach($generoVideos as $bloque)
         <div class="card mb-5 shadow-lg" 
-             style="background-color: rgba(255,255,255,0.85); color: #000000; font-family: 'Montserrat', sans-serif;">
+             style="background-color: rgba(255, 255, 255, 0.47); color: #000000; font-family: 'Montserrat', sans-serif;">
             
             {{-- Encabezado del género --}}
             <div class="card-header text-center" style="background-color: #1E484B; color: white; font-weight: 600; font-size: 1.3rem;">
@@ -26,7 +26,7 @@
                     @foreach($bloque['videos'] as $video)
                         <div class="col-md-4 mb-4">
                             <div class="card h-100 shadow-sm video-card" 
-                                 style="transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                                 style="transition: transform 0.3s ease, box-shadow: 0 6px 10px -2px rgba(0, 0, 0, 0.7);">
                                 <div class="card-body">
                                     <h6 class="card-title" style="color: #00A06E; font-weight: 600;">{{ $video->titulo }}</h6>
                                     <p class="card-text mb-2"><strong>Artista:</strong> {{ $video->usuario->nombre }}</p>

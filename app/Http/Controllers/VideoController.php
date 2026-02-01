@@ -26,7 +26,7 @@ class VideoController extends Controller
      * Guardar un nuevo video
      */
     public function store(Request $request)
-{
+    {
     // Validación flexible para enlaces de YouTube
     $request->validate([
         'titulo' => 'required|string|max:255',
