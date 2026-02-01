@@ -6,29 +6,36 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Concurso;
 use App\Models\Video;
+use App\Models\Notificacion;
 
 class PerfilController extends Controller
 {
     public function index()
-    {
-        // 👉 Usuario autenticado
-        $usuario = Auth::user();
+{
+    // 👉 Usuario autenticado
+    $usuario = Auth::user();
 
-        // 👉 Relación: videos favoritos del usuario
-        $favoritos = $usuario->favoritos()->with('usuario')->get();
+    // 👉 Relación: videos favoritos del usuario
+    $favoritos = $usuario->favoritos()->with('usuario')->get();
 
-        // 👉 Relación: videos votados por el usuario
-        $votados = $usuario->votosEmitidos()->with('video.usuario')->get()->pluck('video');
+    // 👉 Relación: videos votados por el usuario
+    $votados = $usuario->votosEmitidos()->with('video.usuario')->get()->pluck('video');
 
-        // 👉 Relación: concursos en los que participa (derivados de sus videos)
-        $concursos = $usuario->concursosPorVideos()->with('videos.votos')->get()->unique('id');
+    // 👉 Relación: concursos en los que participa (derivados de sus videos)
+    $concursos = $usuario->concursosPorVideos()->with('videos.votos')->get()->unique('id');
 
-        // 👉 Relación: videos subidos por el usuario
-        $misVideos = $usuario->videos()->with('votos')->get();
+    // 👉 Relación: videos subidos por el usuario
+    $misVideos = $usuario->videos()->with('votos')->get();
 
-        // 👉 Retorno a la vista perfil
-        return view('perfil', compact('usuario', 'favoritos', 'votados', 'concursos', 'misVideos'));
-    }
+    // 👉 Notificaciones activas
+    $notificaciones = Notificacion::where('estado', 'activo')
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    // 👉 Retorno a la vista perfil
+    return view('perfil', compact('usuario', 'favoritos', 'votados', 'concursos', 'misVideos', 'notificaciones'));
+}
+
 
     // 👉 Concursos activos
     public function concursosActivos()

@@ -77,6 +77,14 @@
             /* Enlaces del menú más legibles */
         }
 
+        .nav-link.active {
+            background-color: white !important;
+            color: #1E484B !important;
+            font-weight: bold;
+            border-radius: 6px;
+        }
+
+
         .btn-outline-light {
             font-size: 1.1rem;
             /* Botón de Google más visible */
@@ -420,18 +428,34 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="{{ url('/') }}"><i class="fas fa-home me-1"></i>
-                            Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('comunidad.todos') }}"><i
-                                class="fas fa-music me-1"></i> Géneros</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('ranking.index') }}"><i
-                                class="fas fa-star me-1"></i> Ranking</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('comunidad') }}"><i
-                                class="fas fa-users me-1"></i> Concursos
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ url('/') }}">
+                            <i class="fas fa-home me-1"></i> Inicio
                         </a>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('comunidad/todos') ? 'active' : '' }}"
+                            href="{{ route('comunidad.todos') }}">
+                            <i class="fas fa-music me-1"></i> Géneros
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('ranking') ? 'active' : '' }}"
+                            href="{{ route('ranking.index') }}">
+                            <i class="fas fa-star me-1"></i> Ranking
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('comunidad') ? 'active' : '' }}"
+                            href="{{ route('comunidad') }}">
+                            <i class="fas fa-users me-1"></i> Concursos
+                        </a>
+                    </li>
                 </ul>
+
 
                 @auth
                     <a href="{{ route('perfil') }}" class="user-link d-flex align-items-center text-decoration-none ms-5">
@@ -504,12 +528,13 @@
                     <h5>Newsletter</h5>
                     <p>Suscríbete para recibir noticias y actualizaciones.</p>
                     <div class="input-group">
-                        <form action="{{ route('newsletter.subscribe') }}" method="POST" id="newsletterForm"
-                            class="d-flex">
+                        <form action="{{ route('newsletter.subscribe') }}" method="POST" class="d-flex">
                             @csrf
-                            <input type="email" name="email" class="form-control" placeholder="Tu email" required>
-                            <button class="btn btn-primary ms-2" type="submit">Suscribir</button>
+                            <input type="email" name="email" placeholder="Tu email" required class="form-control me-2">
+                            <button type="submit" class="btn btn-primary">Suscribir</button>
                         </form>
+
+
 
                     </div>
                 </div>

@@ -156,8 +156,9 @@
                   <p class="card-text"><strong>Género:</strong> {{ $video->genero }}</p>
                   <p class="card-text"><strong>Artista:</strong> {{ $video->usuario->nombre }}</p>
                   <div class="ratio ratio-16x9">
-                    <iframe id="player-{{ $video->id }}" src="{{ $video->embed_url }}" frameborder="0"
+                    <iframe id="player-{{ $video->id }}" src="{{ $video->embed_url }}?enablejsapi=1" frameborder="0"
                       allowfullscreen></iframe>
+
                   </div>
 
                   <!-- Acciones -->

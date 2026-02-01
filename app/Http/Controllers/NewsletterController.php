@@ -15,12 +15,10 @@ class NewsletterController extends Controller
         $email = strtolower(trim($data['email']));
 
         $subscriber = NewsletterSubscriber::where('email', $email)->first();
-        if ($subscriber) {
-            if ($request->wantsJson()) {
-                return response()->json(['message' => 'Ya estás suscrito con ese correo.'], 200);
-            }
-            return back()->with('newsletter_message', 'Ya estás suscrito con ese correo.');
-        }
+if ($subscriber) {
+    return back()->with('newsletter_message', 'Ya estás suscrito con ese correo.');
+}
+
 
         NewsletterSubscriber::create(['email' => $email]);
 

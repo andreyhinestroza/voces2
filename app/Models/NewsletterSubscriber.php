@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class NewsletterSubscriber extends Model
 {
-    protected $fillable = ['email', 'confirmed'];
-    protected $casts = ['confirmed' => 'boolean'];
+    protected $table = 'newsletter'; // nombre exacto de la tabla
+    protected $fillable = ['email', 'descripcion', 'estado'];
 }

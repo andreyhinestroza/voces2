@@ -30,11 +30,14 @@
                 <div class="notification-box mt-4">
                     <h6><i class="fas fa-bell me-2"></i> Notificaciones</h6>
                     <ul class="mt-2">
-                        <li>Tu video ha sido aprobado para el concurso del Valentón</li>
-                        <li>Has recibido 10 nuevos votos</li>
-                        <li>Nuevo mensaje en el video "Mi Tierra Linda"</li>
+                        @forelse($notificaciones as $notificacion)
+                            <li>{{ $notificacion->descripcion }}</li>
+                        @empty
+                            <li>No tienes notificaciones activas.</li>
+                        @endforelse
                     </ul>
                 </div>
+
 
 
 
@@ -116,15 +119,15 @@
                                                 <p style="margin:0;"><strong>Género:</strong> {{ ucfirst($video->genero) }}</p>
                                             </div>
                                             <button onclick="abrirSelectorConcurso({{ $video->id }})" style="
-                                                                                  background-color:#FAC00B;
-                                                                                  color:#1E484B;
-                                                                                  font-weight:bold;
-                                                                                  font-family:Montserrat, sans-serif;
-                                                                                  border:none;
-                                                                                  border-radius:6px;
-                                                                                  padding:6px 12px;
-                                                                                  transition:background-color 0.3s ease, box-shadow 0.3s ease;
-                                                                                "
+                                                                                              background-color:#FAC00B;
+                                                                                              color:#1E484B;
+                                                                                              font-weight:bold;
+                                                                                              font-family:Montserrat, sans-serif;
+                                                                                              border:none;
+                                                                                              border-radius:6px;
+                                                                                              padding:6px 12px;
+                                                                                              transition:background-color 0.3s ease, box-shadow 0.3s ease;
+                                                                                            "
                                                 onmouseover="this.style.backgroundColor='#1E484B'; this.style.color='#ffffff'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.6)';"
                                                 onmouseout="this.style.backgroundColor='#FAC00B'; this.style.color='#1E484B'; this.style.boxShadow='none';">
                                                 📋 Participar en concurso
@@ -193,7 +196,7 @@
             </div> <!-- cierre col-md-8 -->
         </div> <!-- cierre row -->
     </div> <!-- cierre container -->
-    
+
     <!-- Modal: Selector de concursos -->
     <div class="modal fade" id="modalSelectorConcurso" tabindex="-1">
         <div class="modal-dialog">
@@ -245,11 +248,11 @@
                     let lista = '';
                     data.forEach(concurso => {
                         lista += `
-                      <button class="btn btn-outline-dark w-100 mb-2"
-                        onclick="verificarParticipacion(${videoId}, ${concurso.id}, '${concurso.nombre}', '${concurso.descripcion}', '${concurso.fecha_inicio}', '${concurso.fecha_fin}')">
-                        ${concurso.nombre}
-                      </button>
-                    `;
+                          <button class="btn btn-outline-dark w-100 mb-2"
+                            onclick="verificarParticipacion(${videoId}, ${concurso.id}, '${concurso.nombre}', '${concurso.descripcion}', '${concurso.fecha_inicio}', '${concurso.fecha_fin}')">
+                            ${concurso.nombre}
+                          </button>
+                        `;
                     });
                     document.getElementById('listaConcursos').innerHTML = lista;
                     new bootstrap.Modal(document.getElementById('modalSelectorConcurso')).show();
@@ -271,10 +274,10 @@
         function mostrarConfirmacion(videoId, concursoId, nombre, descripcion, fechaInicio, fechaFin) {
             const detalle = document.getElementById('detalleConcurso');
             detalle.innerHTML = `
-                <p><strong>Concurso:</strong> ${nombre}</p>
-                <p><strong>Descripción:</strong> ${descripcion}</p>
-                <p><strong>Fechas:</strong> ${fechaInicio} al ${fechaFin}</p>
-              `;
+                    <p><strong>Concurso:</strong> ${nombre}</p>
+                    <p><strong>Descripción:</strong> ${descripcion}</p>
+                    <p><strong>Fechas:</strong> ${fechaInicio} al ${fechaFin}</p>
+                  `;
             videoIdSeleccionado = videoId;
             concursoSeleccionado = concursoId;
             new bootstrap.Modal(document.getElementById('modalConfirmarConcurso')).show();

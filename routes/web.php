@@ -13,9 +13,15 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ListaVideoController;
 use App\Http\Controllers\NewsletterController;
 
+// 🌐 Newsletter Subscription
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
+    ->name('newsletter.subscribe');
 
-// ... envio de correo a la BD para noticias
-Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+
+
+
+
+
 
 
 Route::middleware('auth')->group(function () {
