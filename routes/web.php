@@ -14,6 +14,12 @@ use App\Http\Controllers\ListaVideoController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\AdminController;
 
+// 🌐 API para concursos (Admin)
+Route::get('/api/concursos', [AdminController::class, 'listarConcursos']);
+Route::post('/api/concursos', [AdminController::class, 'crearConcurso']);
+Route::post('/api/concursos/{id}/toggle', [AdminController::class, 'toggleConcurso']);
+Route::delete('/api/concursos/{id}', [AdminController::class, 'eliminarConcurso']);
+
 
 // 🌐 API para notificaciones (Admin)
 Route::get('/api/notificaciones', [AdminController::class, 'listarNotificaciones']);

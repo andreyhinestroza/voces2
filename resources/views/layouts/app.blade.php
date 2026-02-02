@@ -636,6 +636,27 @@
                             <!-- Concursos -->
                             <div class="tab-pane fade show active" id="tabConcursos">
                                 <p>Gestión de concursos aquí...</p>
+
+                                <!-- Crear nuevo concurso -->
+                                <div class="mb-3">
+                                    <label class="form-label">Nuevo concurso</label>
+                                    <div class="input-group">
+                                        <input type="text" id="nuevoConcursoNombre" class="form-control"
+                                            placeholder="Nombre">
+                                        <input type="date" id="nuevoConcursoInicio" class="form-control">
+                                        <input type="date" id="nuevoConcursoFin" class="form-control">
+                                        <button class="btn btn-success" id="btnCrearConcurso">
+                                            <i class="fas fa-plus"></i> Crear
+                                        </button>
+                                    </div>
+                                    <textarea id="nuevoConcursoDescripcion" class="form-control mt-2" rows="2"
+                                        placeholder="Descripción"></textarea>
+                                </div>
+
+                                <!-- Listado -->
+                                <h6>Listado de concursos</h6>
+                                <ul id="listaConcursos" class="list-group" style="font-family: Montserrat;"></ul>
+
                             </div>
 
                             <!-- Notificaciones -->
@@ -856,6 +877,187 @@
                 }
             });
         </script>
+
+        <!-- 📜 Script para manejar concursos -->
+        <script>
+function cargarConcursos() {
+    console.log('🌀 Ejecutando cargarConcursos()');
+
+    fetch('/api/concursos')
+        .then(res => res.json())
+        .then(data => {
+            console.log('📋 Concursos recibidos:', data);
+
+            const lista = document.getElementById('listaConcursos');
+            lista.innerHTML = '';
+
+            if (!Array.isArray(data) || data.length === 0) {
+                lista.innerHTML = '<li class="list-group-item">No hay concursos registrados</li>';
+                return;
+            }
+
+            data.forEach(c => {
+                const descripcion = c.descripcion ? c.descripcion : 'Sin descripción';
+                const inicio = c.fecha_inicio !== '0000-00-00' ? c.fecha_inicio : 'No definido';
+                const fin = c.fecha_fin !== '0000-00-00' ? c.fecha_fin : 'No definido';
+
+                const item = document.createElement('li');
+                item.className = 'list-group-item d-flex justify-content-between align-items-center';
+                item.innerHTML = `
+                    <div>
+                        <strong>${c.nombre}</strong><br>
+                        <small>${descripcion}</small><br>
+                        <small>Del ${inicio} al ${fin}</small>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm"
+                            style="background-color:${c.estado === 'activo' ? '#FAC00B' : '#00A06E'}; color:#000;"
+                            onclick="toggleConcurso(${c.id})">
+                            ${c.estado === 'activo' ? '<i class="fas fa-ban"></i> Desactivar' : '<i class="fas fa-check"></i> Activar'}
+                        </button>
+                        <button class="btn btn-sm btn-danger"
+                            onclick="eliminarConcurso(${c.id})">
+                            <i class="fas fa-trash"></i> Borrar
+                        </button>
+                    </div>
+                `;
+                lista.appendChild(item);
+            });
+        })
+        .catch(err => {
+            console.error('❌ Error al cargar concursos:', err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Nombre duplicado',
+                text: err.msg || 'Ya existe un concurso con ese nombre. Ingresa otro.',
+                confirmButtonColor: '#FAC00B'
+            });
+        });
+}
+
+// Crear concurso
+document.getElementById('btnCrearConcurso').addEventListener('click', () => {
+    const nombre = document.getElementById('nuevoConcursoNombre').value;
+    const inicio = document.getElementById('nuevoConcursoInicio').value;
+    const fin = document.getElementById('nuevoConcursoFin').value;
+    const descripcion = document.getElementById('nuevoConcursoDescripcion').value;
+
+    if (!nombre.trim() || !inicio || !fin || !descripcion.trim()) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Campos incompletos',
+            text: 'Completa todos los campos para crear el concurso',
+            confirmButtonColor: '#FAC00B'
+        });
+        return;
+    }
+
+    fetch('/api/concursos', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ nombre, inicio, fin, descripcion })
+    })
+    .then(res => {
+        if (!res.ok) return res.json().then(err => Promise.reject(err));
+        return res.json();
+    })
+    .then(data => {
+        console.log('✅ Respuesta al crear concurso:', data);
+        Swal.fire({
+            icon: 'success',
+            title: 'Concurso creado',
+            text: data.msg,
+            confirmButtonColor: '#00A06E'
+        });
+        document.getElementById('nuevoConcursoNombre').value = '';
+        document.getElementById('nuevoConcursoInicio').value = '';
+        document.getElementById('nuevoConcursoFin').value = '';
+        document.getElementById('nuevoConcursoDescripcion').value = '';
+        cargarConcursos();
+    })
+    .catch(err => {
+        console.error('❌ Error al crear concurso:', err);
+        const msg = err.errors?.nombre?.[0] || err.message || 'Ya existe un concurso con ese nombre. Ingresa otro.';
+        Swal.fire({
+            icon: 'error',
+            title: 'Nombre duplicado',
+            text: msg,
+            confirmButtonColor: '#FAC00B'
+        });
+    });
+});
+
+
+// Activar / desactivar concurso
+function toggleConcurso(id) {
+    fetch(`/api/concursos/${id}/toggle`, {
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log('🔄 Toggle concurso:', data);
+        Swal.fire({
+            icon: data.ok ? 'success' : 'error',
+            title: data.ok ? 'Concurso actualizado' : 'Error',
+            text: data.msg || 'No se pudo actualizar',
+            confirmButtonColor: data.ok ? '#00A06E' : '#FAC00B'
+        });
+        if (data.ok) cargarConcursos();
+    });
+}
+
+// Eliminar concurso
+function eliminarConcurso(id) {
+    Swal.fire({
+        icon: 'warning',
+        title: '¿Eliminar concurso?',
+        text: 'Esta acción no se puede deshacer',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#FAC00B',
+        confirmButtonText: 'Sí, borrar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/api/concursos/${id}`, {
+                method: 'DELETE',
+                headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log('🗑️ Eliminar concurso:', data);
+                Swal.fire({
+                    icon: data.ok ? 'success' : 'error',
+                    title: data.ok ? 'Concurso eliminado' : 'Error',
+                    text: data.msg || 'No se pudo borrar',
+                    confirmButtonColor: data.ok ? '#00A06E' : '#FAC00B'
+                });
+                if (data.ok) cargarConcursos();
+            });
+        }
+    });
+}
+
+// ✅ Ejecutar al cargar la página y al abrir el modal
+document.addEventListener('DOMContentLoaded', function () {
+    cargarConcursos();
+
+    const modal = document.getElementById('modalAdminPanel');
+    if (modal) {
+        modal.addEventListener('show.bs.modal', function () {
+            cargarConcursos();
+        });
+    }
+});
+</script>
+
+
+
+
 
 
 
