@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Notificacion;
 use App\Models\Concurso;
-use App\Models\Newsletter;
+use App\Models\NewsletterSubscriber;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
@@ -168,27 +169,33 @@ class AdminController extends Controller
     // 📌 NEWSLETTER (nuevo)
     // ============================
 
+
     public function suscribirNewsletter(Request $request)
     {
         $request->validate([
-            'email' => 'required|email|unique:newsletters,email'
+            'email' => 'required|email|unique:newsletter,email'
         ]);
 
-        $nuevo = new Newsletter();
+        $nuevo = new NewsletterSubscriber();
         $nuevo->email = $request->email;
+        $nuevo->estado = 'activo';
         $nuevo->save();
 
-        return redirect()->back()->with('newsletter_message', '¡Te has suscrito correctamente al boletín!');
+        return response()->json([
+            'ok' => true,
+            'msg' => 'Suscripción realizada correctamente'
+        ]);
     }
+
 
     public function listarNewsletter()
     {
-        return Newsletter::orderBy('created_at', 'desc')->get();
+        return NewsletterSubscriber::orderBy('created_at', 'desc')->get();
     }
 
     public function eliminarNewsletter($id)
     {
-        $n = Newsletter::find($id);
+        $n = NewsletterSubscriber::find($id);
 
         if (!$n) {
             return response()->json([
@@ -205,4 +212,25 @@ class AdminController extends Controller
             'id' => $id
         ]);
     }
+    public function enviarNewsletter(Request $request)
+    {
+        $request->validate([
+            'mensaje' => 'required|string'
+        ]);
+
+        $suscriptores = NewsletterSubscriber::where('estado', 'activo')->pluck('email');
+
+        foreach ($suscriptores as $correo) {
+            Mail::raw($request->mensaje, function ($message) use ($correo) {
+                $message->to($correo)
+                    ->subject('Noticias - Las Voces de Mi Pueblo');
+            });
+        }
+
+        return response()->json([
+            'ok' => true,
+            'msg' => 'Noticia enviada a todos los suscriptores activos'
+        ]);
+    }
+
 }

@@ -404,7 +404,7 @@
             transform: scale(1.05);
         }
     </style>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
@@ -635,7 +635,21 @@
                         <div class="tab-content">
                             <!-- Concursos -->
                             <div class="tab-pane fade show active" id="tabConcursos">
-                                <p>Gestión de concursos aquí...</p>
+                                <div style="text-align:center;">
+                                    <p style="font-weight:bold; 
+                                    border:2px solid #FAC00B; 
+                                    display:inline-block; 
+                                    padding:8px 16px; 
+                                    border-radius:6px; 
+                                    color:#1E484B; 
+                                    margin:0;">
+                                        <i class="fas fa-trophy" style="color:#FAC00B; margin-right:8px;"></i>
+                                        Gestión de concursos
+                                    </p>
+                                </div>
+
+
+
 
                                 <!-- Crear nuevo concurso -->
                                 <div class="mb-3">
@@ -661,7 +675,19 @@
 
                             <!-- Notificaciones -->
                             <div class="tab-pane fade" id="tabNotificaciones">
-                                <h6 class="mb-3"><i class="fas fa-bell me-2"></i> Gestión de Notificaciones</h6>
+                                <div style="text-align:center;">
+                                    <h6 style="font-weight:bold; 
+                            border:2px solid #FAC00B; 
+                            display:inline-block; 
+                            padding:8px 16px; 
+                            border-radius:6px; 
+                            color:#1E484B; 
+                            margin:0;">
+                                        <i class="fas fa-bell" style="color:#FAC00B; margin-right:8px;"></i>
+                                        Gestión de Notificaciones
+                                    </h6>
+                                </div>
+
 
                                 <!-- Crear nueva notificación -->
                                 <div class="mb-3">
@@ -686,8 +712,47 @@
 
                             <!-- Newsletter -->
                             <div class="tab-pane fade" id="tabNewsletter">
-                                <p>Envío de correo masivo aquí...</p>
+                                <div style="text-align:center;">
+                                    <h6 style="font-weight:bold; 
+                                        border:2px solid #FAC00B; 
+                                        display:inline-block; 
+                                        padding:8px 16px; 
+                                        border-radius:6px; 
+                                        color:#1E484B; 
+                                        margin:0;">
+                                        <i class="fas fa-envelope" style="color:#FAC00B; margin-right:8px;"></i>
+                                        Gestión de Newsletter
+                                    </h6>
+                                </div>
+
+
+                                <!-- Suscribir -->
+                                <div class="mb-3">
+                                    <label class="form-label">Nuevo suscriptor</label>
+                                    <div class="input-group">
+                                        <input type="email" id="nuevoNewsletterEmail" class="form-control"
+                                            placeholder="Correo electrónico">
+                                        <button class="btn btn-success" id="btnSuscribirNewsletter">
+                                            <i class="fas fa-plus"></i> Suscribir
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Listado -->
+                                <h6>Listado de suscriptores</h6>
+                                <ul id="listaNewsletter" class="list-group"></ul>
+
+                                <hr>
+
+                                <!-- Envío masivo -->
+                                <h6>Enviar noticia a todos</h6>
+                                <textarea id="mensajeNewsletter" class="form-control mb-2" rows="3"
+                                    placeholder="Escribe la noticia..."></textarea>
+                                <button class="btn btn-primary" id="btnEnviarNewsletter">
+                                    <i class="fas fa-paper-plane"></i> Enviar a todos
+                                </button>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -880,30 +945,30 @@
 
         <!-- 📜 Script para manejar concursos -->
         <script>
-function cargarConcursos() {
-    console.log('🌀 Ejecutando cargarConcursos()');
+            function cargarConcursos() {
+                console.log('🌀 Ejecutando cargarConcursos()');
 
-    fetch('/api/concursos')
-        .then(res => res.json())
-        .then(data => {
-            console.log('📋 Concursos recibidos:', data);
+                fetch('/api/concursos')
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log('📋 Concursos recibidos:', data);
 
-            const lista = document.getElementById('listaConcursos');
-            lista.innerHTML = '';
+                        const lista = document.getElementById('listaConcursos');
+                        lista.innerHTML = '';
 
-            if (!Array.isArray(data) || data.length === 0) {
-                lista.innerHTML = '<li class="list-group-item">No hay concursos registrados</li>';
-                return;
-            }
+                        if (!Array.isArray(data) || data.length === 0) {
+                            lista.innerHTML = '<li class="list-group-item">No hay concursos registrados</li>';
+                            return;
+                        }
 
-            data.forEach(c => {
-                const descripcion = c.descripcion ? c.descripcion : 'Sin descripción';
-                const inicio = c.fecha_inicio !== '0000-00-00' ? c.fecha_inicio : 'No definido';
-                const fin = c.fecha_fin !== '0000-00-00' ? c.fecha_fin : 'No definido';
+                        data.forEach(c => {
+                            const descripcion = c.descripcion ? c.descripcion : 'Sin descripción';
+                            const inicio = c.fecha_inicio !== '0000-00-00' ? c.fecha_inicio : 'No definido';
+                            const fin = c.fecha_fin !== '0000-00-00' ? c.fecha_fin : 'No definido';
 
-                const item = document.createElement('li');
-                item.className = 'list-group-item d-flex justify-content-between align-items-center';
-                item.innerHTML = `
+                            const item = document.createElement('li');
+                            item.className = 'list-group-item d-flex justify-content-between align-items-center';
+                            item.innerHTML = `
                     <div>
                         <strong>${c.nombre}</strong><br>
                         <small>${descripcion}</small><br>
@@ -921,140 +986,255 @@ function cargarConcursos() {
                         </button>
                     </div>
                 `;
-                lista.appendChild(item);
+                            lista.appendChild(item);
+                        });
+                    })
+                    .catch(err => {
+                        console.error('❌ Error al cargar concursos:', err);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Nombre duplicado',
+                            text: err.msg || 'Ya existe un concurso con ese nombre. Ingresa otro.',
+                            confirmButtonColor: '#FAC00B'
+                        });
+                    });
+            }
+
+            // Crear concurso
+            document.getElementById('btnCrearConcurso').addEventListener('click', () => {
+                const nombre = document.getElementById('nuevoConcursoNombre').value;
+                const inicio = document.getElementById('nuevoConcursoInicio').value;
+                const fin = document.getElementById('nuevoConcursoFin').value;
+                const descripcion = document.getElementById('nuevoConcursoDescripcion').value;
+
+                if (!nombre.trim() || !inicio || !fin || !descripcion.trim()) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Campos incompletos',
+                        text: 'Completa todos los campos para crear el concurso',
+                        confirmButtonColor: '#FAC00B'
+                    });
+                    return;
+                }
+
+                fetch('/api/concursos', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({ nombre, inicio, fin, descripcion })
+                })
+                    .then(res => {
+                        if (!res.ok) return res.json().then(err => Promise.reject(err));
+                        return res.json();
+                    })
+                    .then(data => {
+                        console.log('✅ Respuesta al crear concurso:', data);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Concurso creado',
+                            text: data.msg,
+                            confirmButtonColor: '#00A06E'
+                        });
+                        document.getElementById('nuevoConcursoNombre').value = '';
+                        document.getElementById('nuevoConcursoInicio').value = '';
+                        document.getElementById('nuevoConcursoFin').value = '';
+                        document.getElementById('nuevoConcursoDescripcion').value = '';
+                        cargarConcursos();
+                    })
+                    .catch(err => {
+                        console.error('❌ Error al crear concurso:', err);
+                        const msg = err.errors?.nombre?.[0] || err.message || 'Ya existe un concurso con ese nombre. Ingresa otro.';
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Nombre duplicado',
+                            text: msg,
+                            confirmButtonColor: '#FAC00B'
+                        });
+                    });
             });
-        })
-        .catch(err => {
-            console.error('❌ Error al cargar concursos:', err);
-            Swal.fire({
-                icon: 'error',
-                title: 'Nombre duplicado',
-                text: err.msg || 'Ya existe un concurso con ese nombre. Ingresa otro.',
-                confirmButtonColor: '#FAC00B'
-            });
-        });
-}
-
-// Crear concurso
-document.getElementById('btnCrearConcurso').addEventListener('click', () => {
-    const nombre = document.getElementById('nuevoConcursoNombre').value;
-    const inicio = document.getElementById('nuevoConcursoInicio').value;
-    const fin = document.getElementById('nuevoConcursoFin').value;
-    const descripcion = document.getElementById('nuevoConcursoDescripcion').value;
-
-    if (!nombre.trim() || !inicio || !fin || !descripcion.trim()) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Campos incompletos',
-            text: 'Completa todos los campos para crear el concurso',
-            confirmButtonColor: '#FAC00B'
-        });
-        return;
-    }
-
-    fetch('/api/concursos', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        },
-        body: JSON.stringify({ nombre, inicio, fin, descripcion })
-    })
-    .then(res => {
-        if (!res.ok) return res.json().then(err => Promise.reject(err));
-        return res.json();
-    })
-    .then(data => {
-        console.log('✅ Respuesta al crear concurso:', data);
-        Swal.fire({
-            icon: 'success',
-            title: 'Concurso creado',
-            text: data.msg,
-            confirmButtonColor: '#00A06E'
-        });
-        document.getElementById('nuevoConcursoNombre').value = '';
-        document.getElementById('nuevoConcursoInicio').value = '';
-        document.getElementById('nuevoConcursoFin').value = '';
-        document.getElementById('nuevoConcursoDescripcion').value = '';
-        cargarConcursos();
-    })
-    .catch(err => {
-        console.error('❌ Error al crear concurso:', err);
-        const msg = err.errors?.nombre?.[0] || err.message || 'Ya existe un concurso con ese nombre. Ingresa otro.';
-        Swal.fire({
-            icon: 'error',
-            title: 'Nombre duplicado',
-            text: msg,
-            confirmButtonColor: '#FAC00B'
-        });
-    });
-});
 
 
-// Activar / desactivar concurso
-function toggleConcurso(id) {
-    fetch(`/api/concursos/${id}/toggle`, {
-        method: 'POST',
-        headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log('🔄 Toggle concurso:', data);
-        Swal.fire({
-            icon: data.ok ? 'success' : 'error',
-            title: data.ok ? 'Concurso actualizado' : 'Error',
-            text: data.msg || 'No se pudo actualizar',
-            confirmButtonColor: data.ok ? '#00A06E' : '#FAC00B'
-        });
-        if (data.ok) cargarConcursos();
-    });
-}
+            // Activar / desactivar concurso
+            function toggleConcurso(id) {
+                fetch(`/api/concursos/${id}/toggle`, {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log('🔄 Toggle concurso:', data);
+                        Swal.fire({
+                            icon: data.ok ? 'success' : 'error',
+                            title: data.ok ? 'Concurso actualizado' : 'Error',
+                            text: data.msg || 'No se pudo actualizar',
+                            confirmButtonColor: data.ok ? '#00A06E' : '#FAC00B'
+                        });
+                        if (data.ok) cargarConcursos();
+                    });
+            }
 
-// Eliminar concurso
-function eliminarConcurso(id) {
-    Swal.fire({
-        icon: 'warning',
-        title: '¿Eliminar concurso?',
-        text: 'Esta acción no se puede deshacer',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#FAC00B',
-        confirmButtonText: 'Sí, borrar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            fetch(`/api/concursos/${id}`, {
-                method: 'DELETE',
-                headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
-            })
-            .then(res => res.json())
-            .then(data => {
-                console.log('🗑️ Eliminar concurso:', data);
+            // Eliminar concurso
+            function eliminarConcurso(id) {
                 Swal.fire({
-                    icon: data.ok ? 'success' : 'error',
-                    title: data.ok ? 'Concurso eliminado' : 'Error',
-                    text: data.msg || 'No se pudo borrar',
-                    confirmButtonColor: data.ok ? '#00A06E' : '#FAC00B'
+                    icon: 'warning',
+                    title: '¿Eliminar concurso?',
+                    text: 'Esta acción no se puede deshacer',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#FAC00B',
+                    confirmButtonText: 'Sí, borrar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(`/api/concursos/${id}`, {
+                            method: 'DELETE',
+                            headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                console.log('🗑️ Eliminar concurso:', data);
+                                Swal.fire({
+                                    icon: data.ok ? 'success' : 'error',
+                                    title: data.ok ? 'Concurso eliminado' : 'Error',
+                                    text: data.msg || 'No se pudo borrar',
+                                    confirmButtonColor: data.ok ? '#00A06E' : '#FAC00B'
+                                });
+                                if (data.ok) cargarConcursos();
+                            });
+                    }
                 });
-                if (data.ok) cargarConcursos();
+            }
+
+            // ✅ Ejecutar al cargar la página y al abrir el modal
+            document.addEventListener('DOMContentLoaded', function () {
+                cargarConcursos();
+
+                const modal = document.getElementById('modalAdminPanel');
+                if (modal) {
+                    modal.addEventListener('show.bs.modal', function () {
+                        cargarConcursos();
+                    });
+                }
             });
-        }
-    });
-}
+        </script>
+         
+        <!-- 📜 Script para manejar newsletter -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // ✅ Cargar listado al abrir el modal
+                const modal = document.getElementById('modalAdminPanel');
+                if (modal) {
+                    modal.addEventListener('show.bs.modal', function () {
+                        cargarNewsletter();
+                    });
+                }
 
-// ✅ Ejecutar al cargar la página y al abrir el modal
-document.addEventListener('DOMContentLoaded', function () {
-    cargarConcursos();
+                // ✅ Botón Suscribir
+                const btnSuscribir = document.getElementById('btnSuscribirNewsletter');
+                if (btnSuscribir) {
+                    btnSuscribir.addEventListener('click', () => {
+                        const email = document.getElementById('nuevoNewsletterEmail').value;
+                        if (!email.trim()) {
+                            Swal.fire({ icon: 'error', title: 'Campo vacío', text: 'Ingresa un correo válido' });
+                            return;
+                        }
 
-    const modal = document.getElementById('modalAdminPanel');
-    if (modal) {
-        modal.addEventListener('show.bs.modal', function () {
-            cargarConcursos();
-        });
-    }
-});
-</script>
+                        fetch('/newsletter/suscribir', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                            },
+                            body: JSON.stringify({ email })
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                console.log('✅ Suscripción:', data);
+                                if (data.ok) {
+                                    Swal.fire({ icon: 'success', title: 'Suscrito', text: data.msg });
+                                    document.getElementById('nuevoNewsletterEmail').value = '';
+                                    cargarNewsletter();
+                                } else {
+                                    Swal.fire({ icon: 'error', title: 'Error', text: data.msg });
+                                }
+                            })
+                            .catch(err => {
+                                console.error('❌ Error en suscripción:', err);
+                                Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo conectar con el servidor' });
+                            });
+                    });
+                }
 
+                // ✅ Botón Enviar noticia masiva
+                const btnEnviar = document.getElementById('btnEnviarNewsletter');
+                if (btnEnviar) {
+                    btnEnviar.addEventListener('click', () => {
+                        const mensaje = document.getElementById('mensajeNewsletter').value;
+                        if (!mensaje.trim()) {
+                            Swal.fire({ icon: 'error', title: 'Mensaje vacío', text: 'Escribe la noticia antes de enviar' });
+                            return;
+                        }
+
+                        fetch('/newsletter/enviar', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                            },
+                            body: JSON.stringify({ mensaje })
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                console.log('📨 Envío masivo:', data);
+                                Swal.fire({ icon: data.ok ? 'success' : 'error', title: data.ok ? 'Enviado' : 'Error', text: data.msg });
+                                if (data.ok) document.getElementById('mensajeNewsletter').value = '';
+                            })
+                            .catch(err => {
+                                console.error('❌ Error en envío:', err);
+                                Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo conectar con el servidor' });
+                            });
+                    });
+                }
+            });
+
+            // ✅ Función para cargar listado
+            function cargarNewsletter() {
+                fetch('/api/newsletter')
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log('📋 Newsletter:', data);
+                        const lista = document.getElementById('listaNewsletter');
+                        lista.innerHTML = '';
+                        data.forEach(n => {
+                            const item = document.createElement('li');
+                            item.className = 'list-group-item d-flex justify-content-between align-items-center';
+                            item.innerHTML = `
+                    <div>${n.email}</div>
+                    <button class="btn btn-sm btn-danger" onclick="eliminarNewsletter(${n.id})">
+                        <i class="fas fa-trash"></i> Borrar
+                    </button>
+                `;
+                            lista.appendChild(item);
+                        });
+                    });
+            }
+
+            // ✅ Función para eliminar suscriptor
+            function eliminarNewsletter(id) {
+                fetch(`/api/newsletter/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log('🗑️ Eliminar newsletter:', data);
+                        Swal.fire({ icon: data.ok ? 'success' : 'error', title: data.ok ? 'Eliminado' : 'Error', text: data.msg });
+                        if (data.ok) cargarNewsletter();
+                    });
+            }
+        </script>
 
 
 
