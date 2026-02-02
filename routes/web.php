@@ -12,16 +12,22 @@ use App\Http\Controllers\InteraccionController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ListaVideoController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\AdminController;
+
+
+// 🌐 API para notificaciones (Admin)
+Route::get('/api/notificaciones', [AdminController::class, 'listarNotificaciones']);
+Route::post('/api/notificaciones', [AdminController::class, 'crearNotificacion']);
+Route::post('/api/notificaciones/{id}/toggle', [AdminController::class, 'toggleEstado']);
+Route::delete('/api/notificaciones/{id}', [AdminController::class, 'eliminarNotificacion']);
+
 
 // 🌐 Newsletter Subscription
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
     ->name('newsletter.subscribe');
 
-
-
-
-
-
+// 🌐 Admin - Listar notificaciones   
+Route::get('/api/notificaciones', [AdminController::class, 'listarNotificaciones']);
 
 
 Route::middleware('auth')->group(function () {

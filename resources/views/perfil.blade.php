@@ -163,7 +163,7 @@
                 @elseif($usuario->rol === 'espectador')
                     <!-- Vista especial para espectador -->
                     <div class="alert alert-info text-center mb-4">
-                        <i class="fas fa-eye me-2"></i> Como espectador puedes visualizar videos, votar y guardar tus favoritos.
+                        <i class="fas fa-eye me-2"></i> Como espectador puedes visualizar videos, crear listas de reproducción, votar y guardar tus favoritos.
                     </div>
 
                     <!-- Sección: Videos que me gustan -->

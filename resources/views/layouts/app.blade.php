@@ -405,6 +405,8 @@
         }
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body>
@@ -412,9 +414,12 @@
         <div class="container">
             <div class="d-flex align-items-center">
                 <!-- Logo institucional en el extremo izquierdo -->
-                <a href="#" class="me-3">
+                <a href="javascript:void(0)" class="me-3" id="logoAlcaldia">
                     <img src="{{ asset('img/Logoicono.png') }}" alt="Logo Alcaldía" style="height: 40px; width: auto;">
                 </a>
+
+
+
 
                 <!-- Marca del sitio -->
                 <a class="navbar-brand d-flex align-items-center" href="#">
@@ -480,6 +485,26 @@
     </nav>
 
     @yield('content')
+
+    <!-- Modal: Contraseña -->
+    <div class="modal fade" id="modalPassword" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" style="font-family: Montserrat;">
+                <div class="modal-header">
+                    <h5 class="modal-title">Acceso restringido</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="password" id="adminPassword" class="form-control" placeholder="Ingrese contraseña">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnValidarPassword">Ingresar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <!-- 📎 Pie de página -->
     <footer class="bg-dark text-white py-4">
@@ -547,9 +572,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     @yield('scripts')
+    < @if(session('newsletter_message'))
 
-    @if(session('newsletter_message'))
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 Swal.fire({
@@ -562,6 +586,278 @@
             });
         </script>
     @endif
+        <!-- Modal: Contraseña -->
+        <div class="modal fade" id="modalPassword" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content" style="font-family: Montserrat;">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Acceso restringido</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="password" id="adminPassword" class="form-control" placeholder="Ingrese contraseña">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="btnValidarPassword">Ingresar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal: Panel de Administración -->
+        <div class="modal fade" id="modalAdminPanel" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content" style="font-family: Montserrat;">
+                    <div class="modal-header" style="background-color:#1E484B; color:#FAC00B;">
+                        <h5 class="modal-title">Panel de Administración</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="nav nav-tabs mb-3">
+                            <li class="nav-item">
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tabConcursos">
+                                    Concursos
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabNotificaciones">
+                                    Notificaciones
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabNewsletter">
+                                    Newsletter
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <!-- Concursos -->
+                            <div class="tab-pane fade show active" id="tabConcursos">
+                                <p>Gestión de concursos aquí...</p>
+                            </div>
+
+                            <!-- Notificaciones -->
+                            <div class="tab-pane fade" id="tabNotificaciones">
+                                <h6 class="mb-3"><i class="fas fa-bell me-2"></i> Gestión de Notificaciones</h6>
+
+                                <!-- Crear nueva notificación -->
+                                <div class="mb-3">
+                                    <label for="nuevaNotificacion" class="form-label">Nueva notificación</label>
+                                    <div class="input-group">
+                                        <input type="text" id="nuevaNotificacion" class="form-control"
+                                            placeholder="Escribe la descripción">
+                                        <button class="btn btn-success" id="btnCrearNotificacion">
+                                            <i class="fas fa-plus"></i> Crear
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <hr>
+
+                                <!-- Listado dinámico -->
+                                <h6>Listado de notificaciones</h6>
+                                <ul id="listaNotificaciones" class="list-group" style="font-family: Montserrat;">
+                                    <!-- Se llenará dinámicamente con JS -->
+                                </ul>
+                            </div>
+
+                            <!-- Newsletter -->
+                            <div class="tab-pane fade" id="tabNewsletter">
+                                <p>Envío de correo masivo aquí...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 🚀 Script del triple click -->
+        <script>
+            let clickCount = 0;
+            const logo = document.getElementById('logoAlcaldia');
+
+            if (logo) {
+                logo.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    clickCount++;
+                    if (clickCount === 3) {
+                        clickCount = 0;
+                        new bootstrap.Modal(document.getElementById('modalPassword')).show();
+                    }
+                    setTimeout(() => clickCount = 0, 1000);
+                });
+            }
+
+            document.getElementById('btnValidarPassword').addEventListener('click', () => {
+                const pass = document.getElementById('adminPassword').value;
+                if (pass === 'Candelaria') {
+                    new bootstrap.Modal(document.getElementById('modalAdminPanel')).show();
+                    document.getElementById('modalPassword').querySelector('.btn-close').click();
+                } else {
+                    Swal.fire('Error', 'Contraseña incorrecta', 'error');
+                }
+            });
+        </script>
+
+        <!-- 📜 Script para manejar notificaciones -->
+        <script>
+            // Eliminar notificación
+            function eliminarNotificacion(id) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: '¿Eliminar notificación?',
+                    text: 'Esta acción no se puede deshacer',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#FAC00B',
+                    confirmButtonText: 'Sí, borrar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(`/api/notificaciones/${id}`, {
+                            method: 'DELETE',
+                            headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.ok) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Eliminada',
+                                        text: 'La notificación fue borrada correctamente',
+                                        confirmButtonColor: '#00A06E'
+                                    });
+                                    cargarNotificaciones();
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: data.msg || 'No se pudo borrar',
+                                        confirmButtonColor: '#FAC00B'
+                                    });
+                                }
+                            });
+                    }
+                });
+            }
+
+            // Cargar notificaciones
+            function cargarNotificaciones() {
+                fetch('/api/notificaciones')
+                    .then(res => res.json())
+                    .then(data => {
+                        const lista = document.getElementById('listaNotificaciones');
+                        lista.innerHTML = '';
+                        data.forEach(n => {
+                            const item = document.createElement('li');
+                            item.className = 'list-group-item d-flex justify-content-between align-items-center';
+                            item.innerHTML = `
+                    <span><strong>[${n.tipo}]</strong> ${n.descripcion}</span>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm"
+                            style="background-color:${n.estado === 'activo' ? '#FAC00B' : '#00A06E'}; color:#000; font-family:Montserrat;"
+                            onclick="toggleEstado(${n.id})">
+                            ${n.estado === 'activo' ? '<i class="fas fa-ban"></i> Desactivar' : '<i class="fas fa-check"></i> Activar'}
+                        </button>
+                        <button class="btn btn-sm btn-danger"
+                            style="font-family:Montserrat;"
+                            onclick="eliminarNotificacion(${n.id})">
+                            <i class="fas fa-trash"></i> Borrar
+                        </button>
+                    </div>
+                `;
+                            lista.appendChild(item);
+                        });
+                    });
+            }
+
+
+
+            function toggleEstado(id) {
+                fetch(`/api/notificaciones/${id}/toggle`, {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.ok) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Notificación actualizada',
+                                text: `La notificación ahora está en estado: ${data.estado.toUpperCase()}`,
+                                confirmButtonColor: '#00A06E'
+                            });
+                            cargarNotificaciones();
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: data.msg || 'No se pudo actualizar',
+                                confirmButtonColor: '#FAC00B'
+                            });
+                        }
+                    });
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const modal = document.getElementById('modalAdminPanel');
+                if (modal) {
+                    modal.addEventListener('show.bs.modal', function () {
+                        cargarNotificaciones();
+
+                        const btnCrear = document.getElementById('btnCrearNotificacion');
+                        if (btnCrear) {
+                            btnCrear.addEventListener('click', () => {
+                                const descripcion = document.getElementById('nuevaNotificacion').value;
+                                if (!descripcion.trim()) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: 'Escribe una descripción',
+                                        confirmButtonColor: '#FAC00B'
+                                    });
+                                    return;
+                                }
+
+                                fetch('/api/notificaciones', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                                    },
+                                    body: JSON.stringify({ descripcion })
+                                })
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        if (data.ok) {
+                                            document.getElementById('nuevaNotificacion').value = '';
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Notificación creada',
+                                                text: 'La nueva notificación se agregó correctamente',
+                                                confirmButtonColor: '#00A06E'
+                                            });
+                                            cargarNotificaciones();
+                                        } else {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Error',
+                                                text: data.msg || 'No se pudo crear la notificación',
+                                                confirmButtonColor: '#FAC00B'
+                                            });
+                                        }
+                                    });
+                            });
+                        }
+                    });
+                }
+            });
+        </script>
+
+
 
 </body>
 
